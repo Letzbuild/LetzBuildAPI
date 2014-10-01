@@ -19,5 +19,7 @@ public class Main {
 
         new UserController(new UserService(letzbuildDB));
         new BlogController(new BlogService(letzbuildDB));
+        new ProductController(new ProductService(letzbuildDB));
+
     }
 }

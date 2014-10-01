@@ -1,4 +1,4 @@
-package com.pearson.API;
+package com.letzbuild.API;
 
 import com.mongodb.*;
 
@@ -12,13 +12,14 @@ public class MongoInsert {
         MongoClient c = new MongoClient(new ServerAddress("localhost", 27017));
 
         DB db = c.getDB("test");
-        DBCollection dbCol = db.getCollection("users");
+        DBCollection dbCol = db.getCollection("products");
 
         DBObject doc = new BasicDBObject();
         doc.put("name", "Anupama");
         doc.put("Nationality", "US");
         doc.put("city", "Chennai");
         doc.put("education", new ArrayList<BasicDBObject>());
+
 
         System.out.println(doc);
        dbCol.insert(doc);

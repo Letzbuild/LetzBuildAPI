@@ -1,4 +1,4 @@
-package com.pearson.API;
+package com.letzbuild.API;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
