@@ -5,21 +5,56 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.Properties;
 
 /**
  * Created by venky on 22/09/14.
  */
 public class Main {
     public static void main(String[] args) throws IOException {
-        String mongoURIString = (args.length == 0) ? "mongodb://localhost" : args[0];
-        mongoURIString = "mongodb://subha:demo1234@kahana.mongohq.com:10049/letzbuild";
+
+        Main m = new Main();
+        Properties p = m.readConfigFile();
+
+        String mongoURIString = p.getProperty("connStr");
 
         final MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoURIString));
         final DB letzbuildDB = mongoClient.getDB("letzbuild");
 
         new UserController(new UserService(letzbuildDB));
-        new BlogController(new BlogService(letzbuildDB));
-        new ProductController(new ProductService(letzbuildDB));
+        new ProductController(new ProductService(letzbuildDB, p));
 
+    }
+
+    public Properties readConfigFile() {
+        Properties prop = null;
+        InputStream input = null;
+
+        try {
+
+            String filename = "config.properties";
+            input = getClass().getClassLoader().getResourceAsStream(filename);
+            if (input == null) {
+                System.out.println("Sorry, unable to find " + filename);
+                return prop;
+            }
+
+            prop = new Properties();
+            prop.load(input);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return prop;
     }
 }

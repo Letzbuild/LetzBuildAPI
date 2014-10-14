@@ -21,7 +21,7 @@ public class ProductController {
             if (req.queryParams().size() == 0) {
                 return new ResponseError("One of the parameters is mandatory");
             }
-            List<DBObject> list = productService.searchProducts(req, 10);
+            List<DBObject> list = productService.searchProducts(req);
             if (list != null) {
                 return list;
             }
