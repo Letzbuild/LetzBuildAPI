@@ -36,7 +36,7 @@ public class ProductController {
                 return list;
             }
             res.status(400);
-            return new ResponseError("No products results found");
+            return new ResponseError("No product category results found");
         }, json());
 
         get("/products/categories", (req, res) -> {
@@ -45,7 +45,7 @@ public class ProductController {
                 return list;
             }
             res.status(400);
-            return new ResponseError("No products results found");
+            return new ResponseError("No product categories found");
         }, json());
 
 
