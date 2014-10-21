@@ -14,11 +14,50 @@ import java.util.regex.Pattern;
 public class ProductService {
 
     private DBCollection productsCollection_;
+    private DBCollection categoriesCollection_;
+
     private Properties p_;
 
     public ProductService(final DB letzbuildDB, final Properties p) {
         productsCollection_ = letzbuildDB.getCollection("products");
+        categoriesCollection_ = letzbuildDB.getCollection("categories");
         p_ = p;
+    }
+
+    public List<DBObject> retrieveCategories() {
+        List<DBObject> categories = null;
+
+
+        BasicDBObject query = new BasicDBObject();
+
+        DBCursor cursor = categoriesCollection_.find(query);
+        try {
+            categories = cursor.toArray();
+        } finally {
+            cursor.close();
+        }
+
+        return categories;
+    }
+
+    public List<DBObject> retrieveCategories(String category) {
+        List<DBObject> categories = null;
+
+
+        BasicDBObject query = new BasicDBObject();
+        //db.categories.find({parent: null})
+
+        query.append("_id", category);
+
+
+        DBCursor cursor = categoriesCollection_.find(query);
+        try {
+            categories = cursor.toArray();
+        } finally {
+            cursor.close();
+        }
+
+        return categories;
     }
 
     public List<DBObject> searchProducts(Request req) {
@@ -47,8 +86,6 @@ public class ProductService {
 
             query.append("category", category);
         }
-
-        if (query == null) throw new IllegalArgumentException("One parameter is mandatory and cannot be empty");
 
         DBCursor cursor = productsCollection_.find(query).limit(limit);
         try {

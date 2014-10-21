@@ -29,6 +29,25 @@ public class ProductController {
             return new ResponseError("No products results found");
         }, json());
 
+        get("/products/categories/:category", (req, res) -> {
+            String category = req.params(":category");
+            List<DBObject> list = productService.retrieveCategories(category);
+            if (list != null) {
+                return list;
+            }
+            res.status(400);
+            return new ResponseError("No products results found");
+        }, json());
+
+        get("/products/categories", (req, res) -> {
+            List<DBObject> list = productService.retrieveCategories();
+            if (list != null) {
+                return list;
+            }
+            res.status(400);
+            return new ResponseError("No products results found");
+        }, json());
+
 
         after((req, res) -> {
             res.type("application/json");
