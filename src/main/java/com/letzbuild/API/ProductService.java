@@ -30,30 +30,33 @@ public class ProductService {
             limit = Integer.parseInt(req.queryParams("limit"));
         }
 
+        BasicDBObject query = new BasicDBObject();
+
         String keyword = req.queryParams("word");
-        if ( (keyword != null ) && (keyword.length() > 0) ) {
+        if ( (keyword != null) && (keyword.length() > 0) ) {
             //db.products.find({searchDesc: {$regex:/blue/i}})
 
             String pattern = ".*\\b" + keyword +"\\b.*";
             Pattern regex = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
-            DBObject query = new BasicDBObject("searchDesc", regex);
-            DBCursor cursor = productsCollection_.find(query).limit(limit);
-            try {
-                products = cursor.toArray();
-            } finally {
-                cursor.close();
-            }
+            query.append("searchDesc", regex);
+        }
+
+        String category = req.queryParams("cat");
+        if ( (category != null) && (category.length() > 0) ) {
+            //db.products.find({category: "Steel")
+
+            query.append("category", category);
+        }
+
+        if (query == null) throw new IllegalArgumentException("One parameter is mandatory and cannot be empty");
+
+        DBCursor cursor = productsCollection_.find(query).limit(limit);
+        try {
+            products = cursor.toArray();
+        } finally {
+            cursor.close();
         }
 
         return products;
-    }
-
-    private void failIfInvalid(String name, String email) {
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Parameter 'name' cannot be empty");
-        }
-        if (email == null || email.isEmpty()) {
-            throw new IllegalArgumentException("Parameter 'email' cannot be empty");
-        }
     }
 }

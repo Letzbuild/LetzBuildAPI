@@ -8,10 +8,10 @@ import org.bson.types.ObjectId;
  */
 public class MongoUpdate {
     public static void main(String[] args) throws Exception {
-        MongoClient c = new MongoClient(new ServerAddress("localhost", 27017));
+        MongoClient c = new MongoClient(new MongoClientURI("mongodb://subha:demo1234@kahana.mongohq.com:10049/letzbuild"));
 
-        DB db = c.getDB("test");
-        DBCollection dbCol = db.getCollection("users");
+        DB db = c.getDB("letzbuild");
+        DBCollection dbCol = db.getCollection("products");
 
         //dbCol.update(new BasicDBObject("_id", new ObjectId("53f5c4b50364420830570b05")),
         //    new BasicDBObject("$set", new BasicDBObject("age", 36)));
