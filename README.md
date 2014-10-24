@@ -23,4 +23,29 @@ Lists out all the product categories
 
 **GET**  **http://url:port/products/categories/:category**
 
-This lists out sub categories (breadcrum) along with an immediate parent for a specified category.  
+This lists out sub categories (breadcrum) along with an immediate parent for a specified category.
+
+
+**GET**  **http://url:port/users/:email**
+
+Use this API for 2 purposes -
+ 
+ * authentication - **(temporarily)** for a given username i.e. email ID, this gets the email ID and password pair. 
+ Authentication involves various other things like checking roles, logging of the user etc.  
+ * duplicate email ID check - to check when the user is being registered if the email ID is taken or not.  
+ 
+**POST**  **http://url:port/buyers/add**
+
+The parameters are:
+
+ * fname
+ * lname
+ * company
+ * city
+ * mobile
+ * email
+ * address
+ * zip
+ * password - do an MD5 in the javascript layer itself.  
+
+ 
