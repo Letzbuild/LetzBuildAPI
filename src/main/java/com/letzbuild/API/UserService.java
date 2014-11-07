@@ -23,13 +23,14 @@ public class UserService {
         return user;
     }
 
-    public void createUser(String username, String password) {
+    public void createUser(String username, String password, String userType) {
         InvalidInputs.failIfInvalid("email", username);
         InvalidInputs.failIfInvalid("password", password);
 
         DBObject doc = new BasicDBObject();
         doc.put("username", username);
         doc.put("password", password);
+        doc.put("userType", userType);
         usersCollection_.insert(doc);
     }
 

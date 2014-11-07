@@ -15,7 +15,7 @@ public class BuyerController {
 
         post("/buyers/add", (req, res) -> {
             buyerService.add(req);
-            userService.createUser(req.queryParams("email"), req.queryParams("password"));
+            userService.createUser(req.queryParams("email"), req.queryParams("password"), "buyer");
             res.status(201); // 201 Created
             return "Successfully created user";
         }, json());
