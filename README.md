@@ -11,9 +11,17 @@ The API list :
 
 There are multiple parameters supported. They all form AND clauses if passed together. They can also be used independently.
 
- * cat - This retrieves the products that are categorized under the category.  The full category name is required
  * word - This searches for the full_word on the name and category fields. The word is case insensitive. Note: As of now it is implemented as $regex. Once we have fulltext implemented, we'll alter the implementation to do mongodb's text search
  * limit - This parameter is supplied with a number that limits the search results. So for a registered user, this number could be 10/20/25. For a non-registered user, this could be as low as 4. 
+
+
+**GET**  **http://url:port/products/retrieve?cat=full_word&limit=num&page=num**
+
+There are multiple parameters supported. They all form AND clauses if passed together. They can also be used independently.
+
+ * cat - This retrieves the products that are categorized under the category.  The full category name is required
+ * limit - This parameter is supplied with a number that limits the search results. So for a registered user, this number could be 10/20/25. For a non-registered user, this could be as low as 4. The default is 10. 
+ * page - typical pagination numbers. The default if not passed is 1.  
 
 
 **GET**  **http://url:port/products/categories**  
@@ -47,5 +55,19 @@ The parameters are:
  * address
  * zip
  * password - do an MD5 in the javascript layer itself.  
+ 
+ **POST**  **http://url:port/suppliers/add**
+ vrg738
+ The parameters are:
+ 
+  * fname
+  * lname
+  * company
+  * city
+  * mobile
+  * email
+  * address
+  * zip
+  * password - do an MD5 in the javascript layer itself.  
 
  
