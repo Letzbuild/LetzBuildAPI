@@ -23,11 +23,10 @@ public class Main {
         final MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoURIString));
         final DB letzbuildDB = mongoClient.getDB("letzbuild");
 
+        new BasicController();
         new UserController(new UserService(letzbuildDB));
         new ProductController(new ProductService(letzbuildDB, p));
-
-        UserService userService = new UserService(letzbuildDB);
-        new BuyerController(new BuyerService(letzbuildDB), userService);
+        new BuyerController(new BuyerService(letzbuildDB), new UserService(letzbuildDB));
     }
 
     public Properties readConfigFile() {

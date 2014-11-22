@@ -63,15 +63,5 @@ public class ProductController {
             res.status(400);
             return new ResponseError("No product categories found");
         }, json());
-
-
-        after((req, res) -> {
-            res.type("application/json");
-        });
-
-        exception(IllegalArgumentException.class, (e, req, res) -> {
-            res.status(400);
-            res.body(toJson(new ResponseError(e)));
-        });
     }
 }

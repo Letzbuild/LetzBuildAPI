@@ -3,6 +3,7 @@ package com.letzbuild.API;
 /**
  * Created by venky on 22/09/14.
  */
+
 import com.mongodb.DBObject;
 
 import static spark.Spark.*;
@@ -33,14 +34,5 @@ public class UserController {
                 req.queryParams("name"),
                 req.queryParams("email")
         ), json());*/
-
-        after((req, res) -> {
-            res.type("application/json");
-        });
-
-        exception(IllegalArgumentException.class, (e, req, res) -> {
-            res.status(400);
-            res.body(toJson(new ResponseError(e)));
-        });
     }
 }

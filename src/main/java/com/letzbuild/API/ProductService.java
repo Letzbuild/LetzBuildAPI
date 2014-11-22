@@ -64,23 +64,23 @@ public class ProductService {
 
         int limit = Integer.parseInt(p_.getProperty("pageLimit"));
         String limitStr = req.queryParams("limit");
-        if ( (limitStr !=  null) && (limitStr.length() > 0) ) {
+        if ((limitStr != null) && (limitStr.length() > 0)) {
             limit = Integer.parseInt(req.queryParams("limit"));
         }
 
         BasicDBObject query = new BasicDBObject();
 
         String keyword = req.queryParams("word");
-        if ( (keyword != null) && (keyword.length() > 0) ) {
+        if ((keyword != null) && (keyword.length() > 0)) {
             //db.products.find({searchDesc: {$regex:/blue/i}})
 
-            String pattern = ".*\\b" + keyword +"\\b.*";
+            String pattern = ".*\\b" + keyword + "\\b.*";
             Pattern regex = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
             query.append("searchDesc", regex);
         }
 
         String category = req.queryParams("cat");
-        if ( (category != null) && (category.length() > 0) ) {
+        if ((category != null) && (category.length() > 0)) {
             //db.products.find({category: "Steel")
 
             query.append("category", category);
@@ -101,13 +101,13 @@ public class ProductService {
 
         int limit = Integer.parseInt(p_.getProperty("pageLimit"));
         String limitStr = req.queryParams("limit");
-        if ( (limitStr !=  null) && (limitStr.length() > 0) ) {
+        if ((limitStr != null) && (limitStr.length() > 0)) {
             limit = Integer.parseInt(limitStr);
         }
 
         int page = 1;
         String pageStr = req.queryParams("page");
-        if ( (pageStr !=  null) && (pageStr.length() > 0) ) {
+        if ((pageStr != null) && (pageStr.length() > 0)) {
             page = Integer.parseInt(pageStr);
         }
         // the skips go from 0 onwards.
@@ -116,13 +116,13 @@ public class ProductService {
         BasicDBObject query = new BasicDBObject();
 
         String category = req.queryParams("cat");
-        if ( (category != null) && (category.length() > 0) ) {
+        if ((category != null) && (category.length() > 0)) {
             //db.products.find({category: "Steel"})
 
             query.append("category", category);
         }
 
-        DBCursor cursor = productsCollection_.find(query, prepareProductFields()).skip(page*limit).limit(limit);
+        DBCursor cursor = productsCollection_.find(query, prepareProductFields()).skip(page * limit).limit(limit);
         try {
             products = cursor.toArray();
         } finally {

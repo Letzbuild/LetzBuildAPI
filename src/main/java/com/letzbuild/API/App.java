@@ -28,7 +28,7 @@ public class App {
                 .append("city", "Chennai");
         DBCursor cur = dbCol.find(new BasicDBObject(), new BasicDBObject("_id", false));
         try {
-            while(cur.hasNext()) {
+            while (cur.hasNext()) {
                 DBObject cursor = cur.next();
                 System.out.println(cursor);
             }

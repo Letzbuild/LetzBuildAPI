@@ -28,7 +28,7 @@ public class SupplierService {
         String fname = req.queryParams("fname");
         InvalidInputs.failIfInvalid("fname", fname);
 
-        String city= req.queryParams("city");
+        String city = req.queryParams("city");
         InvalidInputs.failIfInvalid("city", city);
 
         String mobile = req.queryParams("mobile");
