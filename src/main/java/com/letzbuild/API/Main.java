@@ -27,6 +27,7 @@ public class Main {
         new UserController(new UserService(letzbuildDB));
         new ProductController(new ProductService(letzbuildDB, p));
         new BuyerController(new BuyerService(letzbuildDB), new UserService(letzbuildDB));
+        new SupplierController(new SupplierService(letzbuildDB, p), new UserService(letzbuildDB));
     }
 
     public Properties readConfigFile() {

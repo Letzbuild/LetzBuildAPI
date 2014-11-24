@@ -4,18 +4,23 @@ package com.letzbuild.API;
  * Created by venky on 22/09/14.
  */
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 import spark.Request;
+
+import java.util.List;
+import java.util.Properties;
 
 public class SupplierService {
 
     private DBCollection suppliersCollection_;
+    private DBCollection prodSupMapCollection_;
 
-    public SupplierService(final DB letzbuildDB) {
+    private Properties p_;
+
+    public SupplierService(final DB letzbuildDB, final Properties p) {
         suppliersCollection_ = letzbuildDB.getCollection("suppliers");
+        prodSupMapCollection_ = letzbuildDB.getCollection("product_supplier_map");
+        p_ = p;
     }
 
     public void add(Request req) {
@@ -48,5 +53,41 @@ public class SupplierService {
 
         suppliersCollection_.insert(doc);
 
+    }
+
+    public List<DBObject> retrieveSuppliers(Request req) {
+        List<DBObject> suppliers = null;
+
+        int limit = Integer.parseInt(p_.getProperty("pageLimit"));
+        String limitStr = req.queryParams("limit");
+        if ((limitStr != null) && (limitStr.length() > 0)) {
+            limit = Integer.parseInt(limitStr);
+        }
+
+        int page = 1;
+        String pageStr = req.queryParams("page");
+        if ((pageStr != null) && (pageStr.length() > 0)) {
+            page = Integer.parseInt(pageStr);
+        }
+        // the skips go from 0 onwards.
+        --page;
+
+        BasicDBObject query = new BasicDBObject();
+
+        String pcode = req.queryParams("pcode");
+        if ((pcode != null) && (pcode.length() > 0)) {
+            //db.product_supplier_map.find({pcode: "LB123"})
+
+            query.append("pcode", pcode);
+        }
+
+        DBCursor cursor = prodSupMapCollection_.find(query).skip(page * limit).limit(limit);
+        try {
+            suppliers = cursor.toArray();
+        } finally {
+            cursor.close();
+        }
+
+        return suppliers;
     }
 }
