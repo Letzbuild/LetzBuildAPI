@@ -144,6 +144,7 @@ public class ProductService {
         fields.put("specs", 1);
         fields.put("starSuppliers", 1);
         fields.put("url", 1);
+        fields.put("orderSpec", 1);
 
         return fields;
     }

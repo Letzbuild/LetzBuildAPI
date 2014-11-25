@@ -3,6 +3,9 @@ package com.letzbuild.API;
 import com.mongodb.*;
 import org.bson.types.ObjectId;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by venky on 22/08/14.
  */
@@ -13,17 +16,13 @@ public class MongoUpdate {
         DB db = c.getDB("letzbuild");
         DBCollection dbCol = db.getCollection("products");
 
-        //dbCol.update(new BasicDBObject("_id", new ObjectId("53f5c4b50364420830570b05")),
-        //    new BasicDBObject("$set", new BasicDBObject("age", 36)));
+        List<String> elements = new ArrayList<>();
+        elements.add("Mahaveer Chemicals");
+        elements.add("Shah Silica");
+        elements.add("Carlton Silica");
 
-        BasicDBList newList = new BasicDBList();
-        newList.add(new BasicDBObject("type", "homework1").append("score", 24).append("class", "a+"));
-
-        dbCol.update(new BasicDBObject("_id", new ObjectId("53fc4e4051941ad3900b5275")),
-                new BasicDBObject("$addToSet", new BasicDBObject("education",
-                        new BasicDBObject("type", "homework").append("score", 23).append("class", "a")
-                        //newList
-                )), true, true);
+        dbCol.update(new BasicDBObject("category", "Sand"),
+              new BasicDBObject("$set", new BasicDBObject("manufacturers", elements)), true, true);
 
 
         System.out.println(dbCol);
