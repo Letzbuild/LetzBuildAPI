@@ -33,6 +33,8 @@ Lists out all the product categories
 
 This lists out sub categories (breadcrum) along with an immediate parent for a specified category.
 
+==========================================================================================================
+
 
 **GET**  **http://url:port/users/:email**
 
@@ -40,7 +42,10 @@ Use this API for 2 purposes -
  
  * authentication - **(temporarily)** for a given username i.e. email ID, this gets the email ID and password pair. 
  Authentication involves various other things like checking roles, logging of the user etc.  
- * duplicate email ID check - to check when the user is being registered if the email ID is taken or not.  
+ * duplicate email ID check - to check when the user is being registered if the email ID is taken or not. 
+  
+
+==========================================================================================================
  
 **POST**  **http://url:port/buyers/add**
 
@@ -55,9 +60,20 @@ The parameters are:
  * address
  * zip
  * password - do an MD5 in the javascript layer itself.  
+
+========================================================================================================== 
+
+**GET**  **http://url:port/suppliers/retrieve?pcode=product_code&limit=num&page=num**
+
+There are multiple parameters supported. They all form AND clauses if passed together. They can also be used independently.
+
+ * pcode - This retrieves the list of suppliers that are dealing with the product specified as pcode. The pcode is case sensitive. 
+ * limit - This parameter is supplied with a number that limits the search results. So for a registered user, this number could be 10/20/25. For a non-registered user, this could be as low as 4. The default is 10. 
+ * page - typical pagination numbers. The default if not passed is 1.
+ 
  
  **POST**  **http://url:port/suppliers/add**
- vrg738
+
  The parameters are:
  
   * fname
