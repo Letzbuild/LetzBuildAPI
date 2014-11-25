@@ -86,4 +86,74 @@ There are multiple parameters supported. They all form AND clauses if passed tog
   * zip
   * password - do an MD5 in the javascript layer itself.  
 
- 
+========================================================================================================== 
+
+**POST**  **http://url:port/enquiries/product/add**
+
+This enquiry is sent to LetzBuild by selecting a product. 
+
+The parameters are:
+
+* pcode - The product code for which this enquiry is sent
+* fname - First name
+* lname - Last name
+* org - Organization / Company
+* mobile - mobile without the +91
+* email
+* qty - Quantity
+* orderSpec - units for the quantity
+* sub - Subject line. This could be a standard driven by a template
+* needDate - Date on which the product is needed. The date has to be sent in the yyyy-MM-dd format only
+* budget
+* loc - a locality or location
+* freq - frequency
+* reason
+* instr - any specific instruction
+
+
+**POST**  **http://url:port/enquiries/bom/add**
+
+This enquiry is sent to LetzBuild for BOM (Bill Of Material). 
+
+The parameters are:
+
+* fname - First name
+* lname - Last name
+* org - Organization / Company
+* mobile - mobile without the +91
+* email
+* sub - Subject line. This could be a standard driven by a template
+* loc - a locality or location
+* instr - any specific instruction
+
+
+**POST**  **http://url:port/enquiries/pms/add**
+
+This enquiry is sent to LetzBuild for PMS(Procurement Management Services). 
+
+The parameters are:
+
+* fname - First name
+* lname - Last name
+* org - Organization / Company
+* mobile - mobile without the +91
+* email
+* sub - Subject line. This could be a standard driven by a template
+* loc - a locality or location
+* instr - any specific instruction
+
+
+**POST**  **http://url:port/enquiries/qs/add**
+
+This enquiry is sent to LetzBuild for QS(Quotation Services). 
+
+The parameters are:
+
+* fname - First name
+* lname - Last name
+* org - Organization / Company
+* mobile - mobile without the +91
+* email
+* sub - Subject line. This could be a standard driven by a template
+* loc - a locality or location
+* instr - any specific instruction
