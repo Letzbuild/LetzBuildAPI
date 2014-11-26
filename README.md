@@ -7,6 +7,9 @@ Base URL = http://url:port/
 
 The API list :
 -------------
+
+======================================PRODUCTS======================================
+
 **GET**  **http://url:port/products/search?cat=full_word&word=full_word&limit=num**
 
 There are multiple parameters supported. They all form AND clauses if passed together. They can also be used independently.
@@ -33,7 +36,7 @@ Lists out all the product categories
 
 This lists out sub categories (breadcrum) along with an immediate parent for a specified category.
 
-==========================================================================================================
+======================================USERS======================================
 
 
 **GET**  **http://url:port/users/:email**
@@ -45,7 +48,7 @@ Use this API for 2 purposes -
  * duplicate email ID check - to check when the user is being registered if the email ID is taken or not. 
   
 
-==========================================================================================================
+======================================BUYERS======================================
  
 **POST**  **http://url:port/buyers/add**
 
@@ -61,7 +64,7 @@ The parameters are:
  * zip
  * password - do an MD5 in the javascript layer itself.  
 
-========================================================================================================== 
+======================================SUPPLIERS====================================== 
 
 **GET**  **http://url:port/suppliers/retrieve?pcode=product_code&limit=num&page=num**
 
@@ -86,7 +89,7 @@ There are multiple parameters supported. They all form AND clauses if passed tog
   * zip
   * password - do an MD5 in the javascript layer itself.  
 
-========================================================================================================== 
+======================================ENQUIRIES======================================
 
 **POST**  **http://url:port/enquiries/product/add**
 
@@ -110,6 +113,16 @@ The parameters are:
 * reason
 * instr - any specific instruction
 
+**GET**  **http://url:port/enquiries/product/retrieve?pcode=product_code&limit=num&page=num**
+
+There are multiple parameters supported. They all form OR clauses if passed together. Nothing is mandatory
+
+ * pcode - This retrieves the list of enquiries that were sent for a specific product. The pcode if supplied is case sensitive. 
+ * limit - This parameter is supplied with a number that limits the search results. So for a registered user, this number could be 10/20/25. For a non-registered user, this could be as low as 4. The default is 10. 
+ * page - typical pagination numbers. The default if not passed is 1.
+ 
+ The results are always ordered by the enquiry date descending - latest on top
+ 
 
 **POST**  **http://url:port/enquiries/bom/add**
 
@@ -125,6 +138,15 @@ The parameters are:
 * sub - Subject line. This could be a standard driven by a template
 * loc - a locality or location
 * instr - any specific instruction
+
+**GET**  **http://url:port/enquiries/bom/retrieve?limit=num&page=num**
+
+There are multiple parameters supported. They all form OR clauses if passed together. Nothing is mandatory
+
+ * limit - This parameter is supplied with a number that limits the search results. So for a registered user, this number could be 10/20/25. For a non-registered user, this could be as low as 4. The default is 10. 
+ * page - typical pagination numbers. The default if not passed is 1.
+ 
+ The results are always ordered by the enquiry date descending - latest on top
 
 
 **POST**  **http://url:port/enquiries/pms/add**
@@ -142,6 +164,15 @@ The parameters are:
 * loc - a locality or location
 * instr - any specific instruction
 
+**GET**  **http://url:port/enquiries/pms/retrieve?limit=num&page=num**
+
+There are multiple parameters supported. They all form OR clauses if passed together. Nothing is mandatory
+
+ * limit - This parameter is supplied with a number that limits the search results. So for a registered user, this number could be 10/20/25. For a non-registered user, this could be as low as 4. The default is 10. 
+ * page - typical pagination numbers. The default if not passed is 1.
+ 
+ The results are always ordered by the enquiry date descending - latest on top
+
 
 **POST**  **http://url:port/enquiries/qs/add**
 
@@ -157,3 +188,12 @@ The parameters are:
 * sub - Subject line. This could be a standard driven by a template
 * loc - a locality or location
 * instr - any specific instruction
+
+**GET**  **http://url:port/enquiries/qs/retrieve?limit=num&page=num**
+
+There are multiple parameters supported. They all form OR clauses if passed together. Nothing is mandatory
+
+ * limit - This parameter is supplied with a number that limits the search results. So for a registered user, this number could be 10/20/25. For a non-registered user, this could be as low as 4. The default is 10. 
+ * page - typical pagination numbers. The default if not passed is 1.
+ 
+ The results are always ordered by the enquiry date descending - latest on top

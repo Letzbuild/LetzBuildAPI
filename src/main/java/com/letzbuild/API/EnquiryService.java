@@ -100,6 +100,43 @@ public class EnquiryService {
         productEnquiriesCollection_.insert(doc);
     }
 
+    public List<DBObject> retrieveProductEnquiries(Request req) {
+        List<DBObject> enquiries = null;
+
+        int limit = Integer.parseInt(p_.getProperty("pageLimit"));
+        String limitStr = req.queryParams("limit");
+        if ((limitStr != null) && (limitStr.length() > 0)) {
+            limit = Integer.parseInt(limitStr);
+        }
+
+        int page = 1;
+        String pageStr = req.queryParams("page");
+        if ((pageStr != null) && (pageStr.length() > 0)) {
+            page = Integer.parseInt(pageStr);
+        }
+        // the skips go from 0 onwards.
+        --page;
+
+        BasicDBObject query = new BasicDBObject();
+
+        String pcode = req.queryParams("pcode");
+        if ((pcode != null) && (pcode.length() > 0)) {
+            //db.product_enquiries.find({pcode: "LB1"})
+
+            query.append("pcode", pcode);
+        }
+
+        DBCursor cursor = productEnquiriesCollection_.find(query).skip(page * limit)
+                .sort(new BasicDBObject("enqDate", -1)).limit(limit);
+        try {
+            enquiries = cursor.toArray();
+        } finally {
+            cursor.close();
+        }
+
+        return enquiries;
+    }
+
     public void sendBOMEnquiry(Request req) throws ParseException {
 
         String fname = req.queryParams("fname");
@@ -138,6 +175,36 @@ public class EnquiryService {
         doc.put("enqDate", new Date());
 
         bomEnquiriesCollection_.insert(doc);
+    }
+
+    public List<DBObject> retrieveBOMEnquiries(Request req) {
+        List<DBObject> enquiries = null;
+
+        int limit = Integer.parseInt(p_.getProperty("pageLimit"));
+        String limitStr = req.queryParams("limit");
+        if ((limitStr != null) && (limitStr.length() > 0)) {
+            limit = Integer.parseInt(limitStr);
+        }
+
+        int page = 1;
+        String pageStr = req.queryParams("page");
+        if ((pageStr != null) && (pageStr.length() > 0)) {
+            page = Integer.parseInt(pageStr);
+        }
+        // the skips go from 0 onwards.
+        --page;
+
+        BasicDBObject query = new BasicDBObject();
+
+        DBCursor cursor = bomEnquiriesCollection_.find(query).skip(page * limit)
+                .sort(new BasicDBObject("enqDate", -1)).limit(limit);
+        try {
+            enquiries = cursor.toArray();
+        } finally {
+            cursor.close();
+        }
+
+        return enquiries;
     }
 
     public void sendPMSEnquiry(Request req) throws ParseException {
@@ -180,6 +247,36 @@ public class EnquiryService {
         pmsEnquiriesCollection_.insert(doc);
     }
 
+    public List<DBObject> retrievePMSEnquiries(Request req) {
+        List<DBObject> enquiries = null;
+
+        int limit = Integer.parseInt(p_.getProperty("pageLimit"));
+        String limitStr = req.queryParams("limit");
+        if ((limitStr != null) && (limitStr.length() > 0)) {
+            limit = Integer.parseInt(limitStr);
+        }
+
+        int page = 1;
+        String pageStr = req.queryParams("page");
+        if ((pageStr != null) && (pageStr.length() > 0)) {
+            page = Integer.parseInt(pageStr);
+        }
+        // the skips go from 0 onwards.
+        --page;
+
+        BasicDBObject query = new BasicDBObject();
+
+        DBCursor cursor = pmsEnquiriesCollection_.find(query).skip(page * limit)
+                .sort(new BasicDBObject("enqDate", -1)).limit(limit);
+        try {
+            enquiries = cursor.toArray();
+        } finally {
+            cursor.close();
+        }
+
+        return enquiries;
+    }
+
     public void sendQSEnquiry(Request req) throws ParseException {
 
         String fname = req.queryParams("fname");
@@ -218,5 +315,35 @@ public class EnquiryService {
         doc.put("enqDate", new Date());
 
         qsEnquiriesCollection_.insert(doc);
+    }
+
+    public List<DBObject> retrieveQSEnquiries(Request req) {
+        List<DBObject> enquiries = null;
+
+        int limit = Integer.parseInt(p_.getProperty("pageLimit"));
+        String limitStr = req.queryParams("limit");
+        if ((limitStr != null) && (limitStr.length() > 0)) {
+            limit = Integer.parseInt(limitStr);
+        }
+
+        int page = 1;
+        String pageStr = req.queryParams("page");
+        if ((pageStr != null) && (pageStr.length() > 0)) {
+            page = Integer.parseInt(pageStr);
+        }
+        // the skips go from 0 onwards.
+        --page;
+
+        BasicDBObject query = new BasicDBObject();
+
+        DBCursor cursor = qsEnquiriesCollection_.find(query).skip(page * limit)
+                .sort(new BasicDBObject("enqDate", -1)).limit(limit);
+        try {
+            enquiries = cursor.toArray();
+        } finally {
+            cursor.close();
+        }
+
+        return enquiries;
     }
 }

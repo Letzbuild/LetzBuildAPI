@@ -30,6 +30,18 @@ public class EnquiryController {
             return "Successfully created enquiry";
         }, json());
 
+        // retrieve product based enquiries
+        get("/enquiries/product/retrieve", (req, res) -> {
+            List<DBObject> list = enquiryService.retrieveProductEnquiries(req);
+            if (list != null) {
+                return list;
+            }
+            res.status(400);
+            return new ResponseError("No enquiry results found");
+        }, json());
+
+        /*********************************************************************************************/
+
         // send a BOM enquiry
         post("/enquiries/bom/add", (req, res) -> {
             try {
@@ -41,6 +53,18 @@ public class EnquiryController {
             res.status(201); // 201 Created
             return "Successfully created enquiry";
         }, json());
+
+        // retrieve product based enquiries
+        get("/enquiries/bom/retrieve", (req, res) -> {
+            List<DBObject> list = enquiryService.retrieveBOMEnquiries(req);
+            if (list != null) {
+                return list;
+            }
+            res.status(400);
+            return new ResponseError("No enquiry results found");
+        }, json());
+
+        /*********************************************************************************************/
 
         // send an PMS enquiry
         post("/enquiries/pms/add", (req, res) -> {
@@ -54,6 +78,18 @@ public class EnquiryController {
             return "Successfully created enquiry";
         }, json());
 
+        // retrieve product based enquiries
+        get("/enquiries/pms/retrieve", (req, res) -> {
+            List<DBObject> list = enquiryService.retrievePMSEnquiries(req);
+            if (list != null) {
+                return list;
+            }
+            res.status(400);
+            return new ResponseError("No enquiry results found");
+        }, json());
+
+        /*********************************************************************************************/
+
         // send an Quotation Services enquiry
         post("/enquiries/qs/add", (req, res) -> {
             try {
@@ -65,5 +101,16 @@ public class EnquiryController {
             res.status(201); // 201 Created
             return "Successfully created enquiry";
         }, json());
+
+        // retrieve product based enquiries
+        get("/enquiries/qs/retrieve", (req, res) -> {
+            List<DBObject> list = enquiryService.retrieveQSEnquiries(req);
+            if (list != null) {
+                return list;
+            }
+            res.status(400);
+            return new ResponseError("No enquiry results found");
+        }, json());
+
     }
 }
