@@ -24,10 +24,10 @@ public class EnquiryController {
                 enquiryService.sendProductEnquiry(req);
             } catch (ParseException e) {
                 res.status(500);
-                return "Failed to create enquiry";
+                return "failure";
             }
             res.status(201); // 201 Created
-            return "Successfully created enquiry";
+            return "success";
         }, json());
 
         // retrieve product based enquiries
@@ -48,10 +48,10 @@ public class EnquiryController {
                 enquiryService.sendBOMEnquiry(req);
             } catch (ParseException e) {
                 res.status(500);
-                return "Failed to create enquiry";
+                return "failure";
             }
             res.status(201); // 201 Created
-            return "Successfully created enquiry";
+            return "success";
         }, json());
 
         // retrieve product based enquiries
@@ -72,10 +72,10 @@ public class EnquiryController {
                 enquiryService.sendPMSEnquiry(req);
             } catch (ParseException e) {
                 res.status(500);
-                return "Failed to create enquiry";
+                return "failure";
             }
             res.status(201); // 201 Created
-            return "Successfully created enquiry";
+            return "success";
         }, json());
 
         // retrieve product based enquiries
@@ -96,10 +96,10 @@ public class EnquiryController {
                 enquiryService.sendQSEnquiry(req);
             } catch (ParseException e) {
                 res.status(500);
-                return "Failed to create enquiry";
+                return "failure";
             }
             res.status(201); // 201 Created
-            return "Successfully created enquiry";
+            return "success";
         }, json());
 
         // retrieve product based enquiries
