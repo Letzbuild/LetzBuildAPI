@@ -103,15 +103,16 @@ The parameters are:
 * organisation - Organization / Company
 * mobilenumber - mobile without the +91
 * email
-* qty - Quantity
-* orderSpec - units for the quantity
+* quantity - Quantity
+* subject - units for the quantity
+* specification - ordering specification
 * enquiryheading - Subject line. This could be a standard driven by a template
-* needDate - Date on which the product is needed. The date has to be sent in the yyyy-MM-dd format only
-* budget
-* location - a locality or location
-* freq - frequency
-* reason
-* anyadditionalinstruction - any specific instruction
+* datepicker - Date on which the product is needed. The date has to be sent in the yyyy-MM-dd format only
+* approximatebudget
+* deliverylocation - a locality or location
+* frequency - frequency
+* reasonforpurchase
+* anyspecialinstruction - any specific instruction
 
 **GET**  **http://url:port/enquiries/product/retrieve?pcode=product_code&limit=num&page=num**
 
