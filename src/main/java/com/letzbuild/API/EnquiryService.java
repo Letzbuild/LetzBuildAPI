@@ -33,68 +33,73 @@ public class EnquiryService {
     }
 
     public void sendProductEnquiry(Request req) throws ParseException {
+
+        String enqno = req.queryParams("enquirynumber");
+        InvalidInputs.failIfInvalid("enquirynumber", enqno);
+
         String pcode = req.queryParams("pcode");
         InvalidInputs.failIfInvalid("pcode", pcode);
 
-        String firstname = req.queryParams("firstname");
-        InvalidInputs.failIfInvalid("firstname", firstname);
+        String fname = req.queryParams("firstname");
+        InvalidInputs.failIfInvalid("firstname", fname);
 
-        String lastname = req.queryParams("lastname");
-        InvalidInputs.failIfInvalid("lastname", lastname);
+        String lname = req.queryParams("lastname");
+        InvalidInputs.failIfInvalid("lastname", lname);
 
-        String organisation = req.queryParams("organisation");
-        InvalidInputs.failIfInvalid("organisation", organisation);
+        String org = req.queryParams("organisation");
+        InvalidInputs.failIfInvalid("organisation", org);
 
-        String mobilenumber = req.queryParams("mobilenumber");
-        InvalidInputs.failIfInvalid("mobilenumber", mobilenumber);
+        String mobile = req.queryParams("mobilenumber");
+        InvalidInputs.failIfInvalid("mobilenumber", mobile);
 
         String email = req.queryParams("email");
         InvalidInputs.failIfInvalid("email", email);
 
-        String qty = req.queryParams("qty");
-        InvalidInputs.failIfInvalid("qty", qty);
+        String qty = req.queryParams("quantity");
+        InvalidInputs.failIfInvalid("quantity", qty);
 
-        String orderSpec = req.queryParams("orderSpec");
-        InvalidInputs.failIfInvalid("orderSpec", qty);
+        String orderSpec = req.queryParams("specification");
+        InvalidInputs.failIfInvalid("specification", orderSpec);
 
-        String enquiryheading = req.queryParams("enquiryheading");
-        InvalidInputs.failIfInvalid("enquiryheading", enquiryheading);
+        String sub = req.queryParams("subject");
+        InvalidInputs.failIfInvalid("subject", sub);
 
-        String needDate = req.queryParams("needDate");
-        InvalidInputs.failIfInvalid("needDate", needDate);
+        String needDate = req.queryParams("datepicker");
+        InvalidInputs.failIfInvalid("datepicker", needDate);
 
-        String budget = req.queryParams("budget");
-        InvalidInputs.failIfInvalid("budget", budget);
+        String budget = req.queryParams("approximatebudget");
+        InvalidInputs.failIfInvalid("approximatebudget", budget);
 
-        String location = req.queryParams("location");
-        InvalidInputs.failIfInvalid("location", location);
+        String loc = req.queryParams("deliverylocation");
+        InvalidInputs.failIfInvalid("deliverylocation", loc);
 
-        String freq = req.queryParams("freq");
-        InvalidInputs.failIfInvalid("freq", freq);
+        String freq = req.queryParams("frequency");
+        InvalidInputs.failIfInvalid("frequency", freq);
 
-        String reason = req.queryParams("reason");
-        InvalidInputs.failIfInvalid("reason", reason);
+        String reason = req.queryParams("reasonforpurchase");
+        InvalidInputs.failIfInvalid("reasonforpurchase", reason);
 
-        String anyadditionalinstruction = req.queryParams("anyadditionalinstruction");
-        InvalidInputs.failIfInvalid("anyadditionalinstruction", anyadditionalinstruction);
+        String instr = req.queryParams("anyspecialinstruction");
+        InvalidInputs.failIfInvalid("anyspecialinstruction", instr);
 
         DBObject doc = new BasicDBObject();
+        doc.put("enqno", enqno);
         doc.put("pcode", pcode);
-        doc.put("firstname", firstname);
-        doc.put("lastname", lastname);
-        doc.put("organisation", organisation);
-        doc.put("mobilenumber", mobilenumber);
+        doc.put("fname", fname);
+        doc.put("lname", lname);
+        doc.put("org", org);
+        doc.put("mobile", mobile);
         doc.put("email", email);
         doc.put("qty", qty);
         doc.put("orderSpec", orderSpec);
-        doc.put("enquiryheading", enquiryheading);
+        doc.put("sub", sub);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         doc.put("needDate", formatter.parse(needDate));
         doc.put("budget", budget);
-        doc.put("location", location);
+        doc.put("loc", loc);
         doc.put("freq", freq);
         doc.put("reason", reason);
-        doc.put("anyadditionalinstruction", anyadditionalinstruction);
+        doc.put("instr", instr);
         doc.put("enqDate", new Date());
 
         productEnquiriesCollection_.insert(doc);
@@ -139,39 +144,43 @@ public class EnquiryService {
 
     public void sendBOMEnquiry(Request req) throws ParseException {
 
-        String firstname = req.queryParams("firstname");
-        InvalidInputs.failIfInvalid("firstname", firstname);
+        String enqno = req.queryParams("enquirynumber");
+        InvalidInputs.failIfInvalid("enquirynumber", enqno);
 
-        String lastname = req.queryParams("lastname");
-        InvalidInputs.failIfInvalid("lastname", lastname);
+        String fname = req.queryParams("firstname");
+        InvalidInputs.failIfInvalid("firstname", fname);
 
-        String organisation = req.queryParams("organisation");
-        InvalidInputs.failIfInvalid("organisation", organisation);
+        String lname = req.queryParams("lastname");
+        InvalidInputs.failIfInvalid("lastname", lname);
 
-        String mobilenumber = req.queryParams("mobilenumber");
-        InvalidInputs.failIfInvalid("mobilenumber", mobilenumber);
+        String org = req.queryParams("organisation");
+        InvalidInputs.failIfInvalid("organisation", org);
+
+        String mobile = req.queryParams("mobilenumber");
+        InvalidInputs.failIfInvalid("mobilenumber", mobile);
 
         String email = req.queryParams("email");
         InvalidInputs.failIfInvalid("email", email);
 
-        String enquiryheading = req.queryParams("enquiryheading");
-        InvalidInputs.failIfInvalid("enquiryheading", enquiryheading);
+        String sub = req.queryParams("enquiryheading");
+        InvalidInputs.failIfInvalid("enquiryheading", sub);
 
-        String location = req.queryParams("location");
-        InvalidInputs.failIfInvalid("location", location);
+        String loc = req.queryParams("location");
+        InvalidInputs.failIfInvalid("location", loc);
 
-        String anyadditionalinstruction = req.queryParams("anyadditionalinstruction");
-        InvalidInputs.failIfInvalid("anyadditionalinstruction", anyadditionalinstruction);
+        String instr = req.queryParams("anyadditionalinstruction");
+        InvalidInputs.failIfInvalid("anyadditionalinstruction", instr);
 
         DBObject doc = new BasicDBObject();
-        doc.put("firstname", firstname);
-        doc.put("lastname", lastname);
-        doc.put("organisation", organisation);
-        doc.put("mobilenumber", mobilenumber);
+        doc.put("enqno", enqno);
+        doc.put("fname", fname);
+        doc.put("lname", lname);
+        doc.put("org", org);
+        doc.put("mobile", mobile);
         doc.put("email", email);
-        doc.put("enquiryheading", enquiryheading);
-        doc.put("location", location);
-        doc.put("anyadditionalinstruction", anyadditionalinstruction);
+        doc.put("sub", sub);
+        doc.put("loc", loc);
+        doc.put("instr", instr);
         doc.put("enqDate", new Date());
 
         bomEnquiriesCollection_.insert(doc);
@@ -209,39 +218,43 @@ public class EnquiryService {
 
     public void sendPMSEnquiry(Request req) throws ParseException {
 
-        String firstname = req.queryParams("firstname");
-        InvalidInputs.failIfInvalid("firstname", firstname);
+        String enqno = req.queryParams("enquirynumber");
+        InvalidInputs.failIfInvalid("enquirynumber", enqno);
 
-        String lastname = req.queryParams("lastname");
-        InvalidInputs.failIfInvalid("lastname", lastname);
+        String fname = req.queryParams("firstname");
+        InvalidInputs.failIfInvalid("firstname", fname);
 
-        String organisation = req.queryParams("organisation");
-        InvalidInputs.failIfInvalid("organisation", organisation);
+        String lname = req.queryParams("lastname");
+        InvalidInputs.failIfInvalid("lastname", lname);
 
-        String mobilenumber = req.queryParams("mobilenumber");
-        InvalidInputs.failIfInvalid("mobilenumber", mobilenumber);
+        String org = req.queryParams("organisation");
+        InvalidInputs.failIfInvalid("organisation", org);
+
+        String mobile = req.queryParams("mobilenumber");
+        InvalidInputs.failIfInvalid("mobilenumber", mobile);
 
         String email = req.queryParams("email");
         InvalidInputs.failIfInvalid("email", email);
 
-        String enquiryheading = req.queryParams("enquiryheading");
-        InvalidInputs.failIfInvalid("enquiryheading", enquiryheading);
+        String sub = req.queryParams("enquiryheading");
+        InvalidInputs.failIfInvalid("enquiryheading", sub);
 
-        String location = req.queryParams("location");
-        InvalidInputs.failIfInvalid("location", location);
+        String loc = req.queryParams("location");
+        InvalidInputs.failIfInvalid("location", loc);
 
-        String anyadditionalinstruction = req.queryParams("anyadditionalinstruction");
-        InvalidInputs.failIfInvalid("anyadditionalinstruction", anyadditionalinstruction);
+        String instr = req.queryParams("anyadditionalinstruction");
+        InvalidInputs.failIfInvalid("anyadditionalinstruction", instr);
 
         DBObject doc = new BasicDBObject();
-        doc.put("firstname", firstname);
-        doc.put("lastname", lastname);
-        doc.put("organisation", organisation);
-        doc.put("mobilenumber", mobilenumber);
+        doc.put("enqno", enqno);
+        doc.put("fname", fname);
+        doc.put("lname", lname);
+        doc.put("org", org);
+        doc.put("mobile", mobile);
         doc.put("email", email);
-        doc.put("enquiryheading", enquiryheading);
-        doc.put("location", location);
-        doc.put("anyadditionalinstruction", anyadditionalinstruction);
+        doc.put("sub", sub);
+        doc.put("loc", loc);
+        doc.put("instr", instr);
         doc.put("enqDate", new Date());
 
         pmsEnquiriesCollection_.insert(doc);
@@ -279,41 +292,44 @@ public class EnquiryService {
 
     public void sendQSEnquiry(Request req) throws ParseException {
 
-        String firstname = req.queryParams("firstname");
-        InvalidInputs.failIfInvalid("firstname", firstname);
+        String enqno = req.queryParams("enquirynumber");
+        InvalidInputs.failIfInvalid("enquirynumber", enqno);
 
-        String lastname = req.queryParams("lastname");
-        InvalidInputs.failIfInvalid("lastname", lastname);
+        String fname = req.queryParams("firstname");
+        InvalidInputs.failIfInvalid("firstname", fname);
 
-        String organisation = req.queryParams("organisation");
-        InvalidInputs.failIfInvalid("organisation", organisation);
+        String lname = req.queryParams("lastname");
+        InvalidInputs.failIfInvalid("lastname", lname);
 
-        String mobilenumber = req.queryParams("mobilenumber");
-        InvalidInputs.failIfInvalid("mobilenumber", mobilenumber);
+        String org = req.queryParams("organisation");
+        InvalidInputs.failIfInvalid("organisation", org);
+
+        String mobile = req.queryParams("mobilenumber");
+        InvalidInputs.failIfInvalid("mobilenumber", mobile);
 
         String email = req.queryParams("email");
         InvalidInputs.failIfInvalid("email", email);
 
-        String enquiryheading = req.queryParams("enquiryheading");
-        InvalidInputs.failIfInvalid("enquiryheading", enquiryheading);
+        String sub = req.queryParams("enquiryheading");
+        InvalidInputs.failIfInvalid("enquiryheading", sub);
 
-        String location = req.queryParams("location");
-        InvalidInputs.failIfInvalid("location", location);
+        String loc = req.queryParams("location");
+        InvalidInputs.failIfInvalid("location", loc);
 
-        String anyadditionalinstruction = req.queryParams("anyadditionalinstruction");
-        InvalidInputs.failIfInvalid("anyadditionalinstruction", anyadditionalinstruction);
+        String instr = req.queryParams("anyadditionalinstruction");
+        InvalidInputs.failIfInvalid("anyadditionalinstruction", instr);
 
         DBObject doc = new BasicDBObject();
-        doc.put("firstname", firstname);
-        doc.put("lastname", lastname);
-        doc.put("organisation", organisation);
-        doc.put("mobilenumber", mobilenumber);
+        doc.put("enqno", enqno);
+        doc.put("fname", fname);
+        doc.put("lname", lname);
+        doc.put("org", org);
+        doc.put("mobile", mobile);
         doc.put("email", email);
-        doc.put("enquiryheading", enquiryheading);
-        doc.put("location", location);
-        doc.put("anyadditionalinstruction", anyadditionalinstruction);
+        doc.put("sub", sub);
+        doc.put("loc", loc);
+        doc.put("instr", instr);
         doc.put("enqDate", new Date());
-
 
         qsEnquiriesCollection_.insert(doc);
     }
