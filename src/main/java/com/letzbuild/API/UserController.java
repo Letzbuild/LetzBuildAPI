@@ -18,10 +18,11 @@ public class UserController {
             String email = req.params(":email");
             DBObject user = userService.getUser(email);
             if (user != null) {
+                user.put("message", "success");
                 return user;
             }
             res.status(400);
-            return new ResponseError("No user with email '%s' found", email);
+            return new ResponseError("failure");
         }, json());
 
         /*post("/users", (req, res) -> userService.createUser(
