@@ -19,6 +19,30 @@ public class EnquiryController {
     public EnquiryController(final EnquiryService enquiryService) {
 
         // send enquiry for this product to LetzBuild
+        post("/enquiries/supplier/add", (req, res) -> {
+            try {
+                enquiryService.sendSupplierEnquiry(req);
+            } catch (ParseException e) {
+                res.status(500);
+                return "failure";
+            }
+            res.status(201); // 201 Created
+            return "success";
+        }, json());
+
+        // retrieve product based enquiries
+        get("/enquiries/supplier/retrieve", (req, res) -> {
+            List<DBObject> list = enquiryService.retrieveSupplierEnquiries(req);
+            if (list != null) {
+                return list;
+            }
+            res.status(400);
+            return new ResponseError("No enquiry results found");
+        }, json());
+
+        /*********************************************************************************************/
+
+        // send enquiry for this product to LetzBuild
         post("/enquiries/product/add", (req, res) -> {
             try {
                 enquiryService.sendProductEnquiry(req);

@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 public class EnquiryService {
 
+    private DBCollection supplierEnquiriesCollection_;
     private DBCollection productEnquiriesCollection_;
     private DBCollection bomEnquiriesCollection_;
     private DBCollection pmsEnquiriesCollection_;
@@ -25,11 +26,122 @@ public class EnquiryService {
     private Properties p_;
 
     public EnquiryService(final DB letzbuildDB, final Properties p) {
+        supplierEnquiriesCollection_ = letzbuildDB.getCollection("supplier_enquiries");
         productEnquiriesCollection_ = letzbuildDB.getCollection("product_enquiries");
         bomEnquiriesCollection_ = letzbuildDB.getCollection("bom_enquiries");
         pmsEnquiriesCollection_ = letzbuildDB.getCollection("pms_enquiries");
         qsEnquiriesCollection_ = letzbuildDB.getCollection("qs_enquiries");
         p_ = p;
+    }
+
+    public void sendSupplierEnquiry(Request req) throws ParseException {
+
+        String enqno = req.queryParams("enquirynumber");
+        InvalidInputs.failIfInvalid("enquirynumber", enqno);
+
+        String scode = req.queryParams("scode");
+        InvalidInputs.failIfInvalid("scode", scode);
+
+        String fname = req.queryParams("firstname");
+        InvalidInputs.failIfInvalid("firstname", fname);
+
+        String lname = req.queryParams("lastname");
+        InvalidInputs.failIfInvalid("lastname", lname);
+
+        String org = req.queryParams("organisation");
+        InvalidInputs.failIfInvalid("organisation", org);
+
+        String mobile = req.queryParams("mobilenumber");
+        InvalidInputs.failIfInvalid("mobilenumber", mobile);
+
+        String email = req.queryParams("email");
+        InvalidInputs.failIfInvalid("email", email);
+
+        String qty = req.queryParams("quantity");
+        InvalidInputs.failIfInvalid("quantity", qty);
+
+        String orderSpec = req.queryParams("specification");
+        InvalidInputs.failIfInvalid("specification", orderSpec);
+
+        String sub = req.queryParams("subject");
+        InvalidInputs.failIfInvalid("subject", sub);
+
+        String needDate = req.queryParams("datepicker");
+        InvalidInputs.failIfInvalid("datepicker", needDate);
+
+        String budget = req.queryParams("approximatebudget");
+        InvalidInputs.failIfInvalid("approximatebudget", budget);
+
+        String loc = req.queryParams("deliverylocation");
+        InvalidInputs.failIfInvalid("deliverylocation", loc);
+
+        String freq = req.queryParams("frequency");
+        InvalidInputs.failIfInvalid("frequency", freq);
+
+        String reason = req.queryParams("reasonforpurchase");
+        InvalidInputs.failIfInvalid("reasonforpurchase", reason);
+
+        String instr = req.queryParams("anyspecialinstruction");
+        InvalidInputs.failIfInvalid("anyspecialinstruction", instr);
+
+        DBObject doc = new BasicDBObject();
+        doc.put("enqno", enqno);
+        doc.put("pcode", scode);
+        doc.put("fname", fname);
+        doc.put("lname", lname);
+        doc.put("org", org);
+        doc.put("mobile", mobile);
+        doc.put("email", email);
+        doc.put("qty", qty);
+        doc.put("orderSpec", orderSpec);
+        doc.put("sub", sub);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        doc.put("needDate", formatter.parse(needDate));
+        doc.put("budget", budget);
+        doc.put("loc", loc);
+        doc.put("freq", freq);
+        doc.put("reason", reason);
+        doc.put("instr", instr);
+        doc.put("enqDate", new Date());
+
+        supplierEnquiriesCollection_.insert(doc);
+    }
+
+    public List<DBObject> retrieveSupplierEnquiries(Request req) {
+        List<DBObject> enquiries = null;
+
+        int limit = Integer.parseInt(p_.getProperty("pageLimit"));
+        String limitStr = req.queryParams("limit");
+        if ((limitStr != null) && (limitStr.length() > 0)) {
+            limit = Integer.parseInt(limitStr);
+        }
+
+        int page = 1;
+        String pageStr = req.queryParams("page");
+        if ((pageStr != null) && (pageStr.length() > 0)) {
+            page = Integer.parseInt(pageStr);
+        }
+        // the skips go from 0 onwards.
+        --page;
+
+        BasicDBObject query = new BasicDBObject();
+
+        String pcode = req.queryParams("scode");
+        if ((pcode != null) && (pcode.length() > 0)) {
+            //db.product_enquiries.find({scode: "SP1"})
+
+            query.append("scode", pcode);
+        }
+
+        DBCursor cursor = supplierEnquiriesCollection_.find(query).skip(page * limit)
+                .sort(new BasicDBObject("enqDate", -1)).limit(limit);
+        try {
+            enquiries = cursor.toArray();
+        } finally {
+            cursor.close();
+        }
+
+        return enquiries;
     }
 
     public void sendProductEnquiry(Request req) throws ParseException {
@@ -93,7 +205,7 @@ public class EnquiryService {
         doc.put("qty", qty);
         doc.put("orderSpec", orderSpec);
         doc.put("sub", sub);
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         doc.put("needDate", formatter.parse(needDate));
         doc.put("budget", budget);
         doc.put("loc", loc);

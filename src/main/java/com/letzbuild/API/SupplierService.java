@@ -23,6 +23,14 @@ public class SupplierService {
         p_ = p;
     }
 
+    public DBObject getDetails(String scode) {
+        DBObject user = null;
+
+        user = suppliersCollection_.findOne(new BasicDBObject("code", scode));
+
+        return user;
+    }
+
     public void add(Request req) {
         String email = req.queryParams("email");
         InvalidInputs.failIfInvalid("email", email);

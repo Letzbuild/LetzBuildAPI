@@ -66,6 +66,11 @@ The parameters are:
 
 ======================================SUPPLIERS====================================== 
 
+**GET**  **http://url:port/suppliers/:scode**
+
+ Gets the profile details of a supplier based on the supplier's code.   
+ 
+
 **GET**  **http://url:port/suppliers/retrieve?pcode=product_code&limit=num&page=num**
 
 There are multiple parameters supported. They all form AND clauses if passed together. They can also be used independently.
@@ -90,6 +95,40 @@ There are multiple parameters supported. They all form AND clauses if passed tog
   * password - do an MD5 in the javascript layer itself.  
 
 ======================================ENQUIRIES======================================
+
+**POST**  **http://url:port/enquiries/supplier/add**
+
+This enquiry is sent to a specific supplier by selecting a product. 
+
+The parameters are:
+
+* scode - The supplier code for which this enquiry is sent
+* firstname - First name
+* lastname - Last name
+* organisation - Organization / Company
+* mobilenumber - mobile without the +91
+* email
+* quantity - Quantity
+* subject - units for the quantity
+* specification - ordering specification
+* enquiryheading - Subject line. This could be a standard driven by a template
+* datepicker - Date on which the product is needed. The date has to be sent in the yyyy-MM-dd format only
+* approximatebudget
+* deliverylocation - a locality or location
+* frequency - frequency
+* reasonforpurchase
+* anyspecialinstruction - any specific instruction
+
+**GET**  **http://url:port/enquiries/supplier/retrieve?scode=product_code&limit=num&page=num**
+
+There are multiple parameters supported. They all form OR clauses if passed together. Nothing is mandatory
+
+ * scode - This retrieves the list of enquiries that were sent to a specific supplier. The scode if supplied is case sensitive. 
+ * limit - This parameter is supplied with a number that limits the search results. So for a registered user, this number could be 10/20/25. For a non-registered user, this could be as low as 4. The default is 10. 
+ * page - typical pagination numbers. The default if not passed is 1.
+ 
+ The results are always ordered by the enquiry date descending - latest on top
+
 
 **POST**  **http://url:port/enquiries/product/add**
 
