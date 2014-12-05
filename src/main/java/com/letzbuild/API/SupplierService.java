@@ -89,7 +89,15 @@ public class SupplierService {
             query.append("pcode", pcode);
         }
 
-        DBCursor cursor = prodSupMapCollection_.find(query).skip(page * limit).limit(limit);
+        String category = req.queryParams("cat");
+        if ((category != null) && (category.length() > 0)) {
+            //db.product_supplier_map.find({category: "Steel"})
+
+            query.append("category", category);
+        }
+
+        DBCursor cursor = prodSupMapCollection_.find(query).sort(new BasicDBObject("supplier.scode", 1))
+                .skip(page * limit).limit(limit);
         try {
             suppliers = cursor.toArray();
         } finally {

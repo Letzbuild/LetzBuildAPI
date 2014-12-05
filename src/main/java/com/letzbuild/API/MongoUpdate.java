@@ -14,17 +14,16 @@ public class MongoUpdate {
         MongoClient c = new MongoClient(new MongoClientURI("mongodb://subha:demo1234@kahana.mongohq.com:10049/letzbuild"));
 
         DB db = c.getDB("letzbuild");
-        DBCollection dbCol = db.getCollection("products");
+        DBCollection prodCol = db.getCollection("products");
+        DBCollection prodSuppCol = db.getCollection("product_supplier_map");
 
-        List<String> elements = new ArrayList<>();
-        elements.add("Mahaveer Chemicals");
-        elements.add("Shah Silica");
-        elements.add("Carlton Silica");
-
-        dbCol.update(new BasicDBObject("category", "Sand"),
-              new BasicDBObject("$set", new BasicDBObject("manufacturers", elements)), true, true);
-
-
-        System.out.println(dbCol);
+        for(int i = 1; i < 67; ++i) {
+            DBObject res = prodCol.findOne(new BasicDBObject("code", "LB"+i));
+            System.out.println(res.get("code") + " - " + res.get("category"));
+            prodSuppCol.update(new BasicDBObject("pcode", res.get("code")),
+                    new BasicDBObject("$set", new BasicDBObject("purl", res.get("url"))), true, true);
+            //prodCol.update(new BasicDBObject("code", "LB" + i),
+            //          new BasicDBObject("$set", new BasicDBObject("name", res.get("name").toString()+i)), true, true);
+        }
     }
 }

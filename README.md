@@ -71,11 +71,12 @@ The parameters are:
  Gets the profile details of a supplier based on the supplier's code.   
  
 
-**GET**  **http://url:port/suppliers/retrieve?pcode=product_code&limit=num&page=num**
+**GET**  **http://url:port/suppliers/retrieve?pcode=product_code&cate=category&limit=num&page=num**
 
 There are multiple parameters supported. They all form AND clauses if passed together. They can also be used independently.
 
- * pcode - This retrieves the list of suppliers that are dealing with the product specified as pcode. The pcode is case sensitive. 
+ * pcode - This retrieves the list of suppliers that are dealing with the product specified as pcode. The pcode is case sensitive.
+ * cat - This retrieves the suppliers given a product category.  
  * limit - This parameter is supplied with a number that limits the search results. So for a registered user, this number could be 10/20/25. For a non-registered user, this could be as low as 4. The default is 10. 
  * page - typical pagination numbers. The default if not passed is 1.
  
@@ -119,7 +120,7 @@ The parameters are:
 * reasonforpurchase
 * anyspecialinstruction - any specific instruction
 
-**GET**  **http://url:port/enquiries/supplier/retrieve?scode=product_code&limit=num&page=num**
+**GET**  **http://url:port/enquiries/supplier/retrieve?scode=supplier_code&limit=num&page=num**
 
 There are multiple parameters supported. They all form OR clauses if passed together. Nothing is mandatory
 

@@ -17,24 +17,6 @@ public class SupplierController {
 
     public SupplierController(final SupplierService supplierService, UserService userService) {
 
-        get("/suppliers/:scode", (req, res) -> {
-            String scode = req.params(":scode");
-            DBObject user = supplierService.getDetails(scode);
-            if (user != null) {
-                return user;
-            }
-            res.status(400);
-            return new ResponseError("failure");
-        }, json());
-
-        post("/suppliers/add", (req, res) -> {
-            supplierService.add(req);
-            userService.createUser(req.queryParams("email"), req.queryParams("password"), "supplier");
-            res.status(201); // 201 Created
-            return "Successfully created user";
-        }, json());
-
-
         // retrieve suppliers given a product code; supports pagination.
         get("/suppliers/retrieve", (req, res) -> {
             List<DBObject> list = supplierService.retrieveSuppliers(req);
@@ -43,6 +25,23 @@ public class SupplierController {
             }
             res.status(400);
             return new ResponseError("No suppliers results found");
+        }, json());
+
+        get("/suppliers/:scode", (req, res) -> {
+            String scode = req.params(":scode");
+            DBObject user = supplierService.getDetails(scode);
+            if (user != null) {
+                return user;
+            }
+            res.status(400);
+            return new ResponseError("failure1");
+        }, json());
+
+        post("/suppliers/add", (req, res) -> {
+            supplierService.add(req);
+            userService.createUser(req.queryParams("email"), req.queryParams("password"), "supplier");
+            res.status(201); // 201 Created
+            return "Successfully created user";
         }, json());
     }
 
