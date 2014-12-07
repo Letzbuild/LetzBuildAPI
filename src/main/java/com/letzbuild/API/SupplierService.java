@@ -7,7 +7,10 @@ package com.letzbuild.API;
 import com.mongodb.*;
 import spark.Request;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Properties;
 
 public class SupplierService {
@@ -63,47 +66,53 @@ public class SupplierService {
 
     }
 
-    public List<DBObject> retrieveSuppliers(Request req) {
-        List<DBObject> suppliers = null;
+    public Iterable<DBObject> retrieveSuppliers(Request req) {
+        Iterable<DBObject> output = null;
 
-        int limit = Integer.parseInt(p_.getProperty("pageLimit"));
+        int lmt = Integer.parseInt(p_.getProperty("pageLimit"));
         String limitStr = req.queryParams("limit");
         if ((limitStr != null) && (limitStr.length() > 0)) {
-            limit = Integer.parseInt(limitStr);
+            lmt = Integer.parseInt(limitStr);
         }
 
-        int page = 1;
+        int pg = 1;
         String pageStr = req.queryParams("page");
         if ((pageStr != null) && (pageStr.length() > 0)) {
-            page = Integer.parseInt(pageStr);
+            pg = Integer.parseInt(pageStr);
         }
         // the skips go from 0 onwards.
-        --page;
+        --pg;
 
-        BasicDBObject query = new BasicDBObject();
-
-        String pcode = req.queryParams("pcode");
-        if ((pcode != null) && (pcode.length() > 0)) {
-            //db.product_supplier_map.find({pcode: "LB123"})
-
-            query.append("pcode", pcode);
-        }
+        BasicDBObject match = null;
 
         String category = req.queryParams("cat");
         if ((category != null) && (category.length() > 0)) {
-            //db.product_supplier_map.find({category: "Steel"})
-
-            query.append("category", category);
+            // this is to get the aggregated list of suppliers
+            match = new BasicDBObject("$match", new BasicDBObject("category", category));
+        }
+        String pcode = req.queryParams("pcode");
+        if ((pcode != null) && (pcode.length() > 0)) {
+            // this is to get the aggregated list of suppliers
+            match = new BasicDBObject("$match", new BasicDBObject("pcode", pcode));
         }
 
-        DBCursor cursor = prodSupMapCollection_.find(query).sort(new BasicDBObject("supplier.scode", 1))
-                .skip(page * limit).limit(limit);
-        try {
-            suppliers = cursor.toArray();
-        } finally {
-            cursor.close();
-        }
+        //db.product_supplier_map.aggregate([ {$match:{category:"Sand"}},
+        // {$group: {_id:{scode:"$supplier.scode", sname:"$supplier.name"} }} ])
 
-        return suppliers;
+        Map<String, Object> dbObjIdMap = new HashMap<String, Object>();
+        dbObjIdMap.put("scode", "$supplier.scode");
+        dbObjIdMap.put("sname", "$supplier.name");
+        DBObject groupFields = new BasicDBObject( "_id", new BasicDBObject(dbObjIdMap));
+        DBObject group = new BasicDBObject("$group", groupFields);
+
+        DBObject limit = new BasicDBObject("$limit", lmt);
+        DBObject skip = new BasicDBObject("$skip", pg * lmt);
+
+        List<DBObject> pipeline = Arrays.asList(match, group, skip, limit);
+
+        AggregationOutput aggOutput = prodSupMapCollection_.aggregate(pipeline);
+        output = aggOutput.results();
+
+        return output;
     }
 }

@@ -19,10 +19,12 @@ public class SupplierController {
 
         // retrieve suppliers given a product code; supports pagination.
         get("/suppliers/retrieve", (req, res) -> {
-            List<DBObject> list = supplierService.retrieveSuppliers(req);
+            // check if it is based on product code.
+            Iterable<DBObject> list = supplierService.retrieveSuppliers(req);
             if (list != null) {
                 return list;
             }
+
             res.status(400);
             return new ResponseError("No suppliers results found");
         }, json());

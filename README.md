@@ -71,7 +71,7 @@ The parameters are:
  Gets the profile details of a supplier based on the supplier's code.   
  
 
-**GET**  **http://url:port/suppliers/retrieve?pcode=product_code&cate=category&limit=num&page=num**
+**GET**  **http://url:port/suppliers/retrieve?pcode=product_code&cat=category&limit=num&page=num**
 
 There are multiple parameters supported. They all form AND clauses if passed together. They can also be used independently.
 
