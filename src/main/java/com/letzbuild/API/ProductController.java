@@ -35,9 +35,19 @@ public class ProductController {
             if (req.queryParams().size() == 0) {
                 return new ResponseError("One of the parameters is mandatory");
             }
-            List<DBObject> list = productService.retrieveProducts(req);
-            if (list != null) {
-                return list;
+            String category = req.queryParams("cat");
+            if ((category != null) && (category.length() > 0)) {
+                List<DBObject> list = productService.retrieveProducts(req);
+                if (list != null) {
+                    return list;
+                }
+            }
+            String scode = req.queryParams("scode");
+            if ((scode != null) && (scode.length() > 0)) {
+                Iterable<DBObject> list = productService.retrieveProductsForSupplier(req);
+                if (list != null) {
+                    return list;
+                }
             }
             res.status(400);
             return new ResponseError("No products results found");

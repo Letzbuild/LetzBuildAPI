@@ -18,11 +18,12 @@ There are multiple parameters supported. They all form AND clauses if passed tog
  * limit - This parameter is supplied with a number that limits the search results. So for a registered user, this number could be 10/20/25. For a non-registered user, this could be as low as 4. 
 
 
-**GET**  **http://url:port/products/retrieve?cat=full_word&limit=num&page=num**
+**GET**  **http://url:port/products/retrieve?cat=full_word&scode=supplier_code&limit=num&page=num**
 
-There are multiple parameters supported. They all form AND clauses if passed together. They can also be used independently.
+There are multiple parameters supported. They are all mutually exclusive or can be used to filter if it makes sense. They can also be used independently.
 
  * cat - This retrieves the products that are categorized under the category.  The full category name is required
+ * scode - This retrieves the products that the suppliers deal with.  
  * limit - This parameter is supplied with a number that limits the search results. So for a registered user, this number could be 10/20/25. For a non-registered user, this could be as low as 4. The default is 10. 
  * page - typical pagination numbers. The default if not passed is 1.  
 
