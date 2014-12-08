@@ -66,6 +66,7 @@ public class SupplierService {
 
     }
 
+    // retrieve the suppliers based on a product sub category.
     public Iterable<DBObject> retrieveSuppliers(Request req) {
         Iterable<DBObject> output = null;
 
@@ -107,6 +108,57 @@ public class SupplierService {
 
         DBObject limit = new BasicDBObject("$limit", lmt);
         DBObject skip = new BasicDBObject("$skip", pg * lmt);
+
+        List<DBObject> pipeline = Arrays.asList(match, group, skip, limit);
+
+        AggregationOutput aggOutput = prodSupMapCollection_.aggregate(pipeline);
+        output = aggOutput.results();
+
+        if ((category != null) && (category.length() > 0)) {
+            // we need to get the products that belong to this category that the
+            // supplier is supplying and attach....
+            for (DBObject obj : output) {
+                BasicDBObject dbo = (BasicDBObject)obj.get("_id");
+                String scode = dbo.get("scode").toString();
+
+                // this is where we stuff the products for a supplier filtered by category
+                Iterable<DBObject> prods = retrieveProductsForSupplier(category, scode, 1, 10);
+                dbo.put("prods", prods);
+            }
+        }
+
+        return output;
+    }
+
+    public Iterable<DBObject> retrieveProductsForSupplier(String cat, String scode, int pg, int lmt) {
+        Iterable<DBObject> output = null;
+
+        BasicDBObject match = null;
+
+        if ((scode != null) && (scode.length() > 0)) {
+            // this is to get the aggregated list of suppliers
+
+            BasicDBObject matchCond = new BasicDBObject("supplier.scode", scode);
+
+            if ((cat != null) && (cat.length() > 0)) {
+                matchCond.append("category", cat);
+            }
+
+            match = new BasicDBObject("$match", matchCond);
+        }
+
+        //db.product_supplier_map.aggregate([ {$match:{"supplier.scode":"SP1"}},
+        // {$group: {_id:{pcode:"$pcode", pname:"$pname"} }} ])
+
+        Map<String, Object> dbObjIdMap = new HashMap<String, Object>();
+        dbObjIdMap.put("pcode", "$pcode");
+        dbObjIdMap.put("pname", "$pname");
+        dbObjIdMap.put("purl", "$purl");
+        DBObject groupFields = new BasicDBObject( "_id", new BasicDBObject(dbObjIdMap));
+        DBObject group = new BasicDBObject("$group", groupFields);
+
+        DBObject limit = new BasicDBObject("$limit", lmt); // hardcoded
+        DBObject skip = new BasicDBObject("$skip", pg * lmt); // hardcoded
 
         List<DBObject> pipeline = Arrays.asList(match, group, skip, limit);
 

@@ -36,15 +36,9 @@ public class ProductController {
                 return new ResponseError("One of the parameters is mandatory");
             }
             String category = req.queryParams("cat");
-            if ((category != null) && (category.length() > 0)) {
+
+            if ((category != null) && (category.length() > 0) ) {
                 List<DBObject> list = productService.retrieveProducts(req);
-                if (list != null) {
-                    return list;
-                }
-            }
-            String scode = req.queryParams("scode");
-            if ((scode != null) && (scode.length() > 0)) {
-                Iterable<DBObject> list = productService.retrieveProductsForSupplier(req);
                 if (list != null) {
                     return list;
                 }
