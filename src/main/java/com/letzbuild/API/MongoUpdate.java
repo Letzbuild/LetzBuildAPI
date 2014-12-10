@@ -23,7 +23,7 @@ public class MongoUpdate {
             prodSuppCol.update(new BasicDBObject("pcode", res.get("code")),
                     new BasicDBObject("$set", new BasicDBObject("purl", res.get("url"))), true, true);
             //prodCol.update(new BasicDBObject("code", "LB" + i),
-            //          new BasicDBObject("$set", new BasicDBObject("name", res.get("name").toString()+i)), true, true);
+            //          new BasicDBObject("$set", new BasicDBObject("url", "LB" + i + ".jpg")), true, true);
         }
     }
 }

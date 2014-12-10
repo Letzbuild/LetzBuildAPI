@@ -121,6 +121,13 @@ public class ProductService {
             query.append("category", category);
         }
 
+        String pcode = req.queryParams("pcode");
+        if ((pcode != null) && (pcode.length() > 0)) {
+            //db.products.find({category: "Steel"})
+
+            query.append("code", pcode);
+        }
+
         DBCursor cursor = productsCollection_.find(query, prepareProductFields()).skip(page * limit).limit(limit);
         try {
             products = cursor.toArray();

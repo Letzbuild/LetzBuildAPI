@@ -31,21 +31,8 @@ public class SupplierController {
 
         // retrieve suppliers given a product code; supports pagination.
         get("/suppliers/products/retrieve", (req, res) -> {
-            String category = req.queryParams("cat");
-            String scode = req.queryParams("scode");
-            int lmt = 10;
-            String limitStr = req.queryParams("limit");
-            if ((limitStr != null) && (limitStr.length() > 0)) {
-                lmt = Integer.parseInt(limitStr);
-            }
 
-            int pg = 0;
-            String pageStr = req.queryParams("page");
-            if ((pageStr != null) && (pageStr.length() > 0)) {
-                pg = Integer.parseInt(pageStr);
-            }
-
-            Iterable<DBObject> list = supplierService.retrieveProductsForSupplier(category, scode, pg, lmt);
+            Iterable<DBObject> list = supplierService.retrieveProductsForSupplier(req);
             if (list != null) {
                 return list;
             }

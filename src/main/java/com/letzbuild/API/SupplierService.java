@@ -130,6 +130,31 @@ public class SupplierService {
         return output;
     }
 
+    public Iterable<DBObject> retrieveProductsForSupplier(Request req) {
+        Iterable<DBObject> output = null;
+
+        int lmt = Integer.parseInt(p_.getProperty("pageLimit"));
+        String limitStr = req.queryParams("limit");
+        if ((limitStr != null) && (limitStr.length() > 0)) {
+            lmt = Integer.parseInt(limitStr);
+        }
+
+        int pg = 1;
+        String pageStr = req.queryParams("page");
+        if ((pageStr != null) && (pageStr.length() > 0)) {
+            pg = Integer.parseInt(pageStr);
+        }
+        // the skips go from 0 onwards.
+        --pg;
+
+        String category = req.queryParams("cat");
+        String scode = req.queryParams("scode");
+
+        output = retrieveProductsForSupplier(category, scode, pg, lmt);
+
+        return output;
+    }
+
     public Iterable<DBObject> retrieveProductsForSupplier(String cat, String scode, int pg, int lmt) {
         Iterable<DBObject> output = null;
 
