@@ -42,6 +42,12 @@ public class EnquiryService {
         String scode = req.queryParams("scode");
         InvalidInputs.failIfInvalid("scode", scode);
 
+        String sname = req.queryParams("suppliername");
+        InvalidInputs.failIfInvalid("suppliername", sname);
+
+        String pcode = req.queryParams("pcode");
+        InvalidInputs.failIfInvalid("pcode", pcode);
+
         String fname = req.queryParams("firstname");
         InvalidInputs.failIfInvalid("firstname", fname);
 
@@ -86,7 +92,9 @@ public class EnquiryService {
 
         DBObject doc = new BasicDBObject();
         doc.put("enqno", enqno);
-        doc.put("pcode", scode);
+        doc.put("scode", scode);
+        doc.put("sname", sname);
+        doc.put("pcode", pcode);
         doc.put("fname", fname);
         doc.put("lname", lname);
         doc.put("org", org);
@@ -126,11 +134,11 @@ public class EnquiryService {
 
         BasicDBObject query = new BasicDBObject();
 
-        String pcode = req.queryParams("scode");
-        if ((pcode != null) && (pcode.length() > 0)) {
+        String scode = req.queryParams("scode");
+        if ((scode != null) && (scode.length() > 0)) {
             //db.product_enquiries.find({scode: "SP1"})
 
-            query.append("scode", pcode);
+            query.append("scode", scode);
         }
 
         DBCursor cursor = supplierEnquiriesCollection_.find(query).skip(page * limit)

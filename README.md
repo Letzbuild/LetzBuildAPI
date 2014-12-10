@@ -114,6 +114,8 @@ The parameters are:
 
 * enquirynumber - A supplied value meant for tracking the enquiries. 
 * scode - The supplier code for which this enquiry is sent
+* suppliername - The name of the supplier
+* pcode - The product code
 * firstname - First name
 * lastname - Last name
 * organisation - Organization / Company
