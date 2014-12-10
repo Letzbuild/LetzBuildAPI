@@ -122,7 +122,7 @@ public class SupplierService {
                 String scode = dbo.get("scode").toString();
 
                 // this is where we stuff the products for a supplier filtered by category
-                Iterable<DBObject> prods = retrieveProductsForSupplier(category, scode, 1, 10);
+                Iterable<DBObject> prods = retrieveProductsForSupplier(category, scode, 0, 10);
                 dbo.put("prods", prods);
             }
         }
