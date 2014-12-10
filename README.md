@@ -18,11 +18,12 @@ There are multiple parameters supported. They all form AND clauses if passed tog
  * limit - This parameter is supplied with a number that limits the search results. So for a registered user, this number could be 10/20/25. For a non-registered user, this could be as low as 4. 
 
 
-**GET**  **http://url:port/products/retrieve?cat=full_word&limit=num&page=num**
+**GET**  **http://url:port/products/retrieve?cat=full_word&pcode=product_code&limit=num&page=num**
 
 There are multiple parameters supported. They are all mutually exclusive or can be used to filter if it makes sense. They can also be used independently.
 
  * cat - This retrieves the products that are categorized under the category.  The full category name is required
+ * pcode - Fill this up if the details of a specific product is required. 
  * limit - This parameter is supplied with a number that limits the search results. So for a registered user, this number could be 10/20/25. For a non-registered user, this could be as low as 4. The default is 10. 
  * page - typical pagination numbers. The default if not passed is 1.  
 
@@ -111,6 +112,7 @@ This enquiry is sent to a specific supplier by selecting a product.
 
 The parameters are:
 
+* enquirynumber - A supplied value meant for tracking the enquiries. 
 * scode - The supplier code for which this enquiry is sent
 * firstname - First name
 * lastname - Last name
@@ -145,6 +147,7 @@ This enquiry is sent to LetzBuild by selecting a product.
 
 The parameters are:
 
+* enquirynumber - A supplied value meant for tracking the enquiries. 
 * pcode - The product code for which this enquiry is sent
 * firstname - First name
 * lastname - Last name
@@ -179,6 +182,7 @@ This enquiry is sent to LetzBuild for BOM (Bill Of Material).
 
 The parameters are:
 
+* enquirynumber - A supplied value meant for tracking the enquiries. 
 * firstname - First name
 * lastname - Last name
 * organisation - Organization / Company
@@ -204,6 +208,7 @@ This enquiry is sent to LetzBuild for PMS(Procurement Management Services).
 
 The parameters are:
 
+* enquirynumber - A supplied value meant for tracking the enquiries. 
 * firstname - First name
 * lastname - Last name
 * organisation - Organization / Company
@@ -229,6 +234,7 @@ This enquiry is sent to LetzBuild for QS(Quotation Services).
 
 The parameters are:
 
+* enquirynumber - A supplied value meant for tracking the enquiries. 
 * firstname - First name
 * lastname - Last name
 * organisation - Organization / Company
