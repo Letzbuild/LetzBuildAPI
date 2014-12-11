@@ -17,7 +17,7 @@ public class SupplierController {
 
     public SupplierController(final SupplierService supplierService, UserService userService) {
 
-        // retrieve suppliers given a product code; supports pagination.
+        // http://url:port/suppliers/retrieve?pcode=product_code&cat=category&limit=num&page=num
         get("/suppliers/retrieve", (req, res) -> {
             // check if it is based on product code.
             Iterable<DBObject> list = supplierService.retrieveSuppliers(req);
@@ -29,7 +29,7 @@ public class SupplierController {
             return new ResponseError("No suppliers results found");
         }, json());
 
-        // retrieve suppliers given a product code; supports pagination.
+        // http://url:port/suppliers/products/retrieve?scode=supplier_code&limit=num&page=num
         get("/suppliers/products/retrieve", (req, res) -> {
 
             Iterable<DBObject> list = supplierService.retrieveProductsForSupplier(req);
@@ -41,6 +41,7 @@ public class SupplierController {
             return new ResponseError("No suppliers results found");
         }, json());
 
+        //http://url:port/suppliers/:scode
         get("/suppliers/:scode", (req, res) -> {
             String scode = req.params(":scode");
             DBObject user = supplierService.getDetails(scode);
@@ -51,6 +52,7 @@ public class SupplierController {
             return new ResponseError("failure1");
         }, json());
 
+        //http://url:port/suppliers/add
         post("/suppliers/add", (req, res) -> {
             supplierService.add(req);
             userService.createUser(req.queryParams("email"), req.queryParams("password"), "supplier");

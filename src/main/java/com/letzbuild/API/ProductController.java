@@ -17,7 +17,7 @@ public class ProductController {
 
     public ProductController(final ProductService productService) {
 
-        // keyword based search. This is using regex now. Will alter to eleastic search later
+        // http://url:port/products/search?cat=full_word&word=full_word&limit=num
         get("/products/search", (req, res) -> {
             if (req.queryParams().size() == 0) {
                 return new ResponseError("One of the parameters is mandatory");
@@ -30,7 +30,7 @@ public class ProductController {
             return new ResponseError("No products results found");
         }, json());
 
-        // retrive products category wise
+        // http://url:port/products/retrieve?cat=full_word&pcode=product_code&limit=num&page=num
         get("/products/retrieve", (req, res) -> {
             if (req.queryParams().size() == 0) {
                 return new ResponseError("One of the parameters is mandatory");
@@ -45,7 +45,7 @@ public class ProductController {
             return new ResponseError("No products results found");
         }, json());
 
-        // get subcategories for a specified category
+        // http://url:port/products/categories/:category
         get("/products/categories/:category", (req, res) -> {
             String category = req.params(":category");
             List<DBObject> list = productService.retrieveCategories(category);
@@ -56,7 +56,7 @@ public class ProductController {
             return new ResponseError("No product category results found");
         }, json());
 
-        // get all categories that are at root level i.e. parent is null
+        // http://url:port/products/categories
         get("/products/categories", (req, res) -> {
             List<DBObject> list = productService.retrieveCategories();
             if (list != null) {

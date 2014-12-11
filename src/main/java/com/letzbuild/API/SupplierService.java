@@ -103,6 +103,9 @@ public class SupplierService {
         Map<String, Object> dbObjIdMap = new HashMap<String, Object>();
         dbObjIdMap.put("scode", "$supplier.scode");
         dbObjIdMap.put("sname", "$supplier.name");
+        dbObjIdMap.put("pcode", "$pcode");
+        dbObjIdMap.put("pname", "$pname");
+        dbObjIdMap.put("purl", "$purl");
         DBObject groupFields = new BasicDBObject( "_id", new BasicDBObject(dbObjIdMap));
         DBObject group = new BasicDBObject("$group", groupFields);
 
