@@ -68,6 +68,21 @@ public class SupplierService {
 
     // retrieve the suppliers based on a product sub category.
     public Iterable<DBObject> retrieveSuppliers(Request req) {
+
+        String category = req.queryParams("cat");
+        if ((category != null) && (category.length() > 0)) {
+            return retrieveSuppliersBasedOnCategory(req);
+        }
+        String pcode = req.queryParams("pcode");
+        if ((pcode != null) && (pcode.length() > 0)) {
+            return retrieveSuppliersBasedOnProduct(req);
+        }
+
+        return null;
+    }
+
+    // retrieve the suppliers based on a product sub category.
+    public Iterable<DBObject> retrieveSuppliersBasedOnCategory(Request req) {
         Iterable<DBObject> output = null;
 
         int lmt = Integer.parseInt(p_.getProperty("pageLimit"));
@@ -84,18 +99,10 @@ public class SupplierService {
         // the skips go from 0 onwards.
         --pg;
 
-        BasicDBObject match = null;
-
         String category = req.queryParams("cat");
-        if ((category != null) && (category.length() > 0)) {
-            // this is to get the aggregated list of suppliers
-            match = new BasicDBObject("$match", new BasicDBObject("category", category));
-        }
-        String pcode = req.queryParams("pcode");
-        if ((pcode != null) && (pcode.length() > 0)) {
-            // this is to get the aggregated list of suppliers
-            match = new BasicDBObject("$match", new BasicDBObject("pcode", pcode));
-        }
+
+        // this is to get the aggregated list of suppliers
+        BasicDBObject match = new BasicDBObject("$match", new BasicDBObject("category", category));
 
         //db.product_supplier_map.aggregate([ {$match:{category:"Sand"}},
         // {$group: {_id:{scode:"$supplier.scode", sname:"$supplier.name"} }} ])
@@ -103,9 +110,7 @@ public class SupplierService {
         Map<String, Object> dbObjIdMap = new HashMap<String, Object>();
         dbObjIdMap.put("scode", "$supplier.scode");
         dbObjIdMap.put("sname", "$supplier.name");
-        dbObjIdMap.put("pcode", "$pcode");
-        dbObjIdMap.put("pname", "$pname");
-        dbObjIdMap.put("purl", "$purl");
+
         DBObject groupFields = new BasicDBObject( "_id", new BasicDBObject(dbObjIdMap));
         DBObject group = new BasicDBObject("$group", groupFields);
 
@@ -117,21 +122,67 @@ public class SupplierService {
         AggregationOutput aggOutput = prodSupMapCollection_.aggregate(pipeline);
         output = aggOutput.results();
 
-        if ((category != null) && (category.length() > 0)) {
-            // we need to get the products that belong to this category that the
-            // supplier is supplying and attach....
-            for (DBObject obj : output) {
-                BasicDBObject dbo = (BasicDBObject)obj.get("_id");
-                String scode = dbo.get("scode").toString();
+        // we need to get the products that belong to this category that the
+        // supplier is supplying and attach....
+        for (DBObject obj : output) {
+            BasicDBObject dbo = (BasicDBObject)obj.get("_id");
+            String scode = dbo.get("scode").toString();
 
-                // this is where we stuff the products for a supplier filtered by category
-                Iterable<DBObject> prods = retrieveProductsForSupplier(category, scode, 0, 10);
-                dbo.put("prods", prods);
-            }
+            // this is where we stuff the products for a supplier filtered by category
+            Iterable<DBObject> prods = retrieveProductsForSupplier(category, scode, 0, 10);
+            dbo.put("prods", prods);
         }
 
         return output;
     }
+
+    // retrieve the suppliers based on a product sub category.
+    public Iterable<DBObject> retrieveSuppliersBasedOnProduct(Request req) {
+        Iterable<DBObject> output = null;
+
+        int lmt = Integer.parseInt(p_.getProperty("pageLimit"));
+        String limitStr = req.queryParams("limit");
+        if ((limitStr != null) && (limitStr.length() > 0)) {
+            lmt = Integer.parseInt(limitStr);
+        }
+
+        int pg = 1;
+        String pageStr = req.queryParams("page");
+        if ((pageStr != null) && (pageStr.length() > 0)) {
+            pg = Integer.parseInt(pageStr);
+        }
+        // the skips go from 0 onwards.
+        --pg;
+
+        String pcode = req.queryParams("pcode");
+
+        // this is to get the aggregated list of suppliers
+        BasicDBObject match = new BasicDBObject("$match", new BasicDBObject("pcode", pcode));
+
+        //db.product_supplier_map.aggregate([ {$match:{category:"Sand"}},
+        // {$group: {_id:{scode:"$supplier.scode", sname:"$supplier.name"} }} ])
+
+        Map<String, Object> dbObjIdMap = new HashMap<String, Object>();
+        dbObjIdMap.put("scode", "$supplier.scode");
+        dbObjIdMap.put("sname", "$supplier.name");
+        dbObjIdMap.put("pcode", "$pcode");
+        dbObjIdMap.put("pname", "$pname");
+        dbObjIdMap.put("purl", "$purl");
+
+        DBObject groupFields = new BasicDBObject( "_id", new BasicDBObject(dbObjIdMap));
+        DBObject group = new BasicDBObject("$group", groupFields);
+
+        DBObject limit = new BasicDBObject("$limit", lmt);
+        DBObject skip = new BasicDBObject("$skip", pg * lmt);
+
+        List<DBObject> pipeline = Arrays.asList(match, group, skip, limit);
+
+        AggregationOutput aggOutput = prodSupMapCollection_.aggregate(pipeline);
+        output = aggOutput.results();
+
+        return output;
+    }
+
 
     public Iterable<DBObject> retrieveProductsForSupplier(Request req) {
         Iterable<DBObject> output = null;
