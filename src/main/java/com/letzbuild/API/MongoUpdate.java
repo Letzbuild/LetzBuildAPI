@@ -2,6 +2,7 @@ package com.letzbuild.API;
 
 import com.mongodb.*;
 import org.bson.types.ObjectId;
+import sun.misc.FloatingDecimal;
 
 import java.util.*;
 
@@ -10,8 +11,8 @@ import java.util.*;
  */
 public class MongoUpdate {
     public static void main(String[] args) throws Exception {
-        //MongoClient c = new MongoClient(new MongoClientURI("mongodb://subha:demo1234@kahana.mongohq.com:10049/letzbuild"));
-        MongoClient c = new MongoClient(new ServerAddress("localhost", 27017));
+        MongoClient c = new MongoClient(new MongoClientURI("mongodb://subha:demo1234@kahana.mongohq.com:10049/letzbuild"));
+        //MongoClient c = new MongoClient(new ServerAddress("localhost", 27017));
 
         DB db = c.getDB("letzbuild");
         DBCollection prodCol = db.getCollection("products");
@@ -35,18 +36,44 @@ public class MongoUpdate {
         System.out.println("renameProductCategory");
         mu.renameProductCategory(prodCol);*/
 
-        System.out.println("addStarRating");
-        mu.addStarRating(supplierCol);
+        //System.out.println("addStarRating");
+        //mu.addStarRating(supplierCol, prodSuppMapCol, prodCol);
+
+        System.out.println("getting rating info in prod supp mapping");
+        mu.addRatinginPSM(supplierCol, prodSuppMapCol);
 
     }
 
-    private void addStarRating(DBCollection supplierCol) {
-        DBCursor cursor = supplierCol.find(new BasicDBObject("rating", 5));
-        for (DBObject obj : cursor) {
+    private void addRatinginPSM(DBCollection supplierCol, DBCollection prodSuppMapCol) {
+        DBCursor suppCursor = supplierCol.find();
+        for (DBObject suppObj : suppCursor) {
 
-            System.out.println(obj.get("code"));
+            System.out.println(suppObj.get("code"));
+
+            BasicDBObject target = new BasicDBObject("supplier",
+                    new BasicDBObject("scode", suppObj.get("code"))
+                            .append("name", suppObj.get("name"))
+                            .append("rating", suppObj.get("rating")));
+
+            prodSuppMapCol.update(new BasicDBObject("supplier.scode", suppObj.get("code")),
+                        new BasicDBObject("$set", target), false, true);
+        }
+    }
+
+    private void addStarRating(DBCollection supplierCol, DBCollection prodSuppMapCol, DBCollection prodCol) {
+        DBCursor suppCursor = supplierCol.find(new BasicDBObject("rating", 5));
+        for (DBObject suppObj : suppCursor) {
+
+            System.out.println(suppObj.get("code"));
 
 
+            DBCursor prodSuppCursor = prodSuppMapCol.find(new BasicDBObject("supplier.scode", suppObj.get("code")));
+            for (DBObject prodSuppObj : prodSuppCursor) {
+                System.out.println(prodSuppObj.get("pcode"));
+                prodCol.update(new BasicDBObject("code", prodSuppObj.get("pcode")),
+                        new BasicDBObject("$push", new BasicDBObject("starSuppliers",
+                                new BasicDBObject("scode", suppObj.get("code")).append("name", suppObj.get("name")))));
+            }
         }
     }
 
