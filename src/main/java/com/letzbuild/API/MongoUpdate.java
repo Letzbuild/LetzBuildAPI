@@ -24,10 +24,10 @@ public class MongoUpdate {
 
         MongoUpdate mu = new MongoUpdate();
 
-        /*System.out.println("prepareProdSuppMap");
+        System.out.println("prepareProdSuppMap");
         mu.prepareProdSuppMap(catArr, prodCol, supplierCol, prodSuppMapCol);
 
-        System.out.println("createCategoryTree");
+        /*System.out.println("createCategoryTree");
         mu.createCategoryTree(catArr, prodCol, categoriesCol);
 
         System.out.println("updateSupplierCounts");
@@ -39,8 +39,11 @@ public class MongoUpdate {
         //System.out.println("addStarRating");
         //mu.addStarRating(supplierCol, prodSuppMapCol, prodCol);
 
-        System.out.println("getting rating info in prod supp mapping");
-        mu.addRatinginPSM(supplierCol, prodSuppMapCol);
+        //System.out.println("getting rating info in prod supp mapping");
+        //mu.addRatinginPSM(supplierCol, prodSuppMapCol);
+
+       // System.out.println("Reduce products in the prod supp map");
+       // mu.splitDimAndSpec(prodCol, prodSuppMapCol);
 
     }
 
@@ -119,13 +122,14 @@ public class MongoUpdate {
     private void prepareProdSuppMap(String [] catArr, DBCollection prodCol, DBCollection supplierCol,
                                     DBCollection prodSuppMapCol) {
 
-        DBObject inClause = new BasicDBObject("$in", catArr);
+        //DBObject inClause = new BasicDBObject("$in", catArr);
 
-        DBCursor cursor = prodCol.find(new BasicDBObject("category", inClause));
+        DBCursor cursor = prodCol.find();
         for (DBObject obj : cursor) {
+            System.out.println(obj.get("code"));
             prodSuppMapCol.update(new BasicDBObject("pcode", obj.get("code")),
                        new BasicDBObject("$set",
-                               new BasicDBObject("category", obj.get("subCategory"))
+                               new BasicDBObject("category", obj.get("category"))
                                        .append("pname", obj.get("name")).append("purl", obj.get("url"))), false, true);
         }
 
@@ -133,7 +137,7 @@ public class MongoUpdate {
         for (DBObject sobj : sCursor) {
 
             BasicDBObject target = new BasicDBObject("supplier",
-                    new BasicDBObject("scode", sobj.get("code")).append("name", sobj.get("name")));
+                    new BasicDBObject("scode", sobj.get("code")).append("name", sobj.get("name")).append("rating", sobj.get("rating")));
 
             System.out.println(target);
 
@@ -198,14 +202,17 @@ public class MongoUpdate {
         return output;
     }
 
-    private void foo() {
-        for (int i = 1; i < 67; ++i) {
-            //DBObject res = prodCol.findOne(new BasicDBObject("code", "LB"+i));
-            System.out.println("LB" + i);
-            //prodCol.update(new BasicDBObject("code", "LB" + i),
-            //        new BasicDBObject("$set", new BasicDBObject("code", "OLB" + i)), true, true);
-            //prodEnqCol.update(new BasicDBObject("pcode", "LB" + i),
-            //          new BasicDBObject("$set", new BasicDBObject("pcode", "OLB" + i)), true, true);
+    private void splitDimAndSpec(DBCollection prodCol, DBCollection prodSuppMapCol) {
+
+        DBCursor cursor = prodSuppMapCol.find();
+        for (DBObject obj : cursor) {
+
+            DBObject prod = prodCol.findOne(new BasicDBObject("code", obj.get("pcode")));
+            if (prod == null) {
+                System.out.println(obj.get("pcode"));
+                prodSuppMapCol.remove(new BasicDBObject("pcode", obj.get("pcode")));
+            }
+
         }
     }
 }

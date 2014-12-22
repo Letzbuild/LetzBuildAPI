@@ -129,6 +129,7 @@ public class ProductService {
         }
 
         DBCursor cursor = productsCollection_.find(query, prepareProductFields()).skip(page * limit).limit(limit);
+
         try {
             products = cursor.toArray();
         } finally {
@@ -147,6 +148,7 @@ public class ProductService {
         fields.put("manufacturers", 1);
         fields.put("name", 1);
         fields.put("purpose", 1);
+        fields.put("dim", 1);
         fields.put("specs", 1);
         fields.put("starSuppliers", 1);
         fields.put("url", 1);
