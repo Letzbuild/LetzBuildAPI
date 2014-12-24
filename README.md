@@ -10,14 +10,6 @@ The API list :
 
 ======================================PRODUCTS======================================
 
-**GET**  **http://url:port/products/search?cat=full_word&word=full_word&limit=num**
-
-There are multiple parameters supported. They all form AND clauses if passed together. They can also be used independently.
-
- * word - This searches for the full_word on the name and category fields. The word is case insensitive. Note: As of now it is implemented as $regex. Once we have fulltext implemented, we'll alter the implementation to do mongodb's text search
- * limit - This parameter is supplied with a number that limits the search results. So for a registered user, this number could be 10/20/25. For a non-registered user, this could be as low as 4. 
-
-
 **GET**  **http://url:port/products/retrieve?cat=full_word&pcode=product_code&limit=num&page=num**
 
 There are multiple parameters supported. They are all mutually exclusive or can be used to filter if it makes sense. They can also be used independently.
@@ -254,3 +246,18 @@ There are multiple parameters supported. They all form OR clauses if passed toge
  * page - typical pagination numbers. The default if not passed is 1.
  
  The results are always ordered by the enquiry date descending - latest on top
+ 
+ 
+ ======================================Search======================================
+ 
+ 
+ **GET**  **http://url:port/search/global?word=keyword**
+ 
+  * word - This is the search phrase or keyword or partial word etc.
+   
+ 
+**GET**  **http://url:port/search/indexproducts**
+ 
+  Use this API to index all products. 
+   
+  
