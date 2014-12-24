@@ -24,8 +24,8 @@ public class MongoUpdate {
 
         MongoUpdate mu = new MongoUpdate();
 
-        System.out.println("prepareProdSuppMap");
-        mu.prepareProdSuppMap(catArr, prodCol, supplierCol, prodSuppMapCol);
+        //System.out.println("prepareProdSuppMap");
+        //mu.prepareProdSuppMap(catArr, prodCol, supplierCol, prodSuppMapCol);
 
         /*System.out.println("createCategoryTree");
         mu.createCategoryTree(catArr, prodCol, categoriesCol);
@@ -44,7 +44,6 @@ public class MongoUpdate {
 
        // System.out.println("Reduce products in the prod supp map");
        // mu.splitDimAndSpec(prodCol, prodSuppMapCol);
-
     }
 
     private void addRatinginPSM(DBCollection supplierCol, DBCollection prodSuppMapCol) {

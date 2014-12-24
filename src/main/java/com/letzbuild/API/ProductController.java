@@ -5,8 +5,11 @@ package com.letzbuild.API;
  */
 
 import com.mongodb.DBObject;
+import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.search.SearchHit;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.letzbuild.API.JsonUtil.json;
 import static com.letzbuild.API.JsonUtil.toJson;
@@ -16,19 +19,6 @@ import static spark.Spark.*;
 public class ProductController {
 
     public ProductController(final ProductService productService) {
-
-        // http://url:port/products/search?cat=full_word&word=full_word&limit=num
-        get("/products/search", (req, res) -> {
-            if (req.queryParams().size() == 0) {
-                return new ResponseError("One of the parameters is mandatory");
-            }
-            List<DBObject> list = productService.searchProducts(req);
-            if (list != null) {
-                return list;
-            }
-            res.status(400);
-            return new ResponseError("No products results found");
-        }, json());
 
         // http://url:port/products/retrieve?cat=full_word&pcode=product_code&limit=num&page=num
         get("/products/retrieve", (req, res) -> {

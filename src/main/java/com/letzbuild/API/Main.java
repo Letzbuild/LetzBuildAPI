@@ -3,10 +3,13 @@ package com.letzbuild.API;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.settings.ImmutableSettings;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.transport.InetSocketTransportAddress;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Enumeration;
 import java.util.Properties;
 
 /**
@@ -19,9 +22,9 @@ public class Main {
         Properties p = m.readConfigFile();
 
         String mongoURIString = p.getProperty("connStr");
+        MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoURIString));
 
-        final MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoURIString));
-        final DB letzbuildDB = mongoClient.getDB("letzbuild");
+        DB letzbuildDB = mongoClient.getDB("letzbuild");
 
         new BasicController();
         new UserController(new UserService(letzbuildDB));
@@ -29,6 +32,7 @@ public class Main {
         new BuyerController(new BuyerService(letzbuildDB), new UserService(letzbuildDB));
         new SupplierController(new SupplierService(letzbuildDB, p), new UserService(letzbuildDB));
         new EnquiryController(new EnquiryService(letzbuildDB, p));
+        new SearchController(new SearchService(letzbuildDB, p));
     }
 
     public Properties readConfigFile() {

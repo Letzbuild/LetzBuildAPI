@@ -5,6 +5,13 @@ package com.letzbuild.API;
  */
 
 import com.mongodb.*;
+import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
 import spark.Request;
 
 import java.util.*;
@@ -56,43 +63,6 @@ public class ProductService {
         }
 
         return categories;
-    }
-
-    public List<DBObject> searchProducts(Request req) {
-        List<DBObject> products = null;
-
-        int limit = Integer.parseInt(p_.getProperty("pageLimit"));
-        String limitStr = req.queryParams("limit");
-        if ((limitStr != null) && (limitStr.length() > 0)) {
-            limit = Integer.parseInt(req.queryParams("limit"));
-        }
-
-        BasicDBObject query = new BasicDBObject();
-
-        String keyword = req.queryParams("word");
-        if ((keyword != null) && (keyword.length() > 0)) {
-            //db.products.find({searchDesc: {$regex:/blue/i}})
-
-            String pattern = ".*\\b" + keyword + "\\b.*";
-            Pattern regex = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
-            query.append("searchDesc", regex);
-        }
-
-        String category = req.queryParams("cat");
-        if ((category != null) && (category.length() > 0)) {
-            //db.products.find({category: "Steel")
-
-            query.append("category", category);
-        }
-
-        DBCursor cursor = productsCollection_.find(query).limit(limit);
-        try {
-            products = cursor.toArray();
-        } finally {
-            cursor.close();
-        }
-
-        return products;
     }
 
     public List<DBObject> retrieveProducts(Request req) {
