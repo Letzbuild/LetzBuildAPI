@@ -1,0 +1,119 @@
+Products mapping
+================
+
+{
+  "settings": {
+      "analysis": {
+         "filter": {
+            "nGram_filter": {
+               "type": "nGram",
+               "min_gram": 2,
+               "max_gram": 20,
+               "token_chars": [
+                  "letter",
+                  "digit",
+                  "punctuation",
+                  "symbol"
+               ]
+            }
+         },
+         "analyzer": {
+            "nGram_analyzer": {
+               "type": "custom",
+               "tokenizer": "whitespace",
+               "filter": [
+                  "lowercase",
+                  "asciifolding",
+                  "nGram_filter"
+               ]
+            },
+            "whitespace_analyzer": {
+               "type": "custom",
+               "tokenizer": "whitespace",
+               "filter": [
+                  "lowercase",
+                  "asciifolding"
+               ]
+            }
+         }
+      }
+   },
+   "mappings": {
+          "product":{
+               "_all": {
+                           "index_analyzer": "nGram_analyzer",
+                           "search_analyzer": "whitespace_analyzer"
+                        },
+               "properties": {
+                    "category": {"type":"string"},
+                    "code": {"type":"string"},
+                    "name": {"type":"string"},
+                    "desc": {"type":"string"},
+                    "manufacturers" : {"type" : "string", "index_name" : "manufacturer"},
+                    "purpose" : {"type" : "string", "index_name" : "purp"},
+                    "url": {"type": "string", "index": "no", "include_in_all": false}
+
+               }
+          }
+   }
+}
+
+Suppliers mapping
+=================
+
+{
+  "settings": {
+      "analysis": {
+         "filter": {
+            "nGram_filter": {
+               "type": "nGram",
+               "min_gram": 2,
+               "max_gram": 20,
+               "token_chars": [
+                  "letter",
+                  "digit",
+                  "punctuation",
+                  "symbol"
+               ]
+            }
+         },
+         "analyzer": {
+            "nGram_analyzer": {
+               "type": "custom",
+               "tokenizer": "whitespace",
+               "filter": [
+                  "lowercase",
+                  "asciifolding",
+                  "nGram_filter"
+               ]
+            },
+            "whitespace_analyzer": {
+               "type": "custom",
+               "tokenizer": "whitespace",
+               "filter": [
+                  "lowercase",
+                  "asciifolding"
+               ]
+            }
+         }
+      }
+   },
+   "mappings": {
+          "supplier":{
+               "_all": {
+                           "index_analyzer": "nGram_analyzer",
+                           "search_analyzer": "whitespace_analyzer"
+                        },
+               "properties": {
+                    "name": {"type":"string"},
+                    "rating": {"type":"integer"},
+                    "city": {"type":"string"},
+                    "state": {"type":"string"},
+                         "address": {"type":"string"},
+                    "geoLoc" : {"type" : "geo_point"}
+
+               }
+          }
+   }
+}
+

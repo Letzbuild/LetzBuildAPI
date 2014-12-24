@@ -253,6 +253,9 @@ There are multiple parameters supported. They all form OR clauses if passed toge
  
  **GET**  **http://url:port/search/global?word=keyword**
  
+ It is called as global because it has the capability to search in product, supplier and categories and services in the future. 
+ The results come grouped according to the index names. 
+ 
   * word - This is the search phrase or keyword or partial word etc.
    
  
@@ -260,4 +263,7 @@ There are multiple parameters supported. They all form OR clauses if passed toge
  
   Use this API to index all products. 
    
-  
+   
+**GET**  **http://url:port/search/indexsuppliers**
+ 
+  Use this API to index all suppliers.   

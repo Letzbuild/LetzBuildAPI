@@ -8,6 +8,7 @@ import com.mongodb.DBObject;
 import org.elasticsearch.search.SearchHit;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.letzbuild.API.JsonUtil.json;
 import static spark.Spark.get;
@@ -22,7 +23,7 @@ public class SearchController {
             if (req.queryParams().size() == 0) {
                 return new ResponseError("One of the parameters is mandatory");
             }
-            List<Object> list = searchService.globalSearch(req);
+            Map<String, Object> list = searchService.globalSearch(req);
             if (list != null) {
                 return list;
             }

@@ -42,8 +42,8 @@ public class MongoUpdate {
         //System.out.println("getting rating info in prod supp mapping");
         //mu.addRatinginPSM(supplierCol, prodSuppMapCol);
 
-       // System.out.println("Reduce products in the prod supp map");
-       // mu.splitDimAndSpec(prodCol, prodSuppMapCol);
+       System.out.println("cleanup format of leoLoc");
+       mu.geoLocCleanup(supplierCol);
     }
 
     private void addRatinginPSM(DBCollection supplierCol, DBCollection prodSuppMapCol) {
@@ -201,17 +201,21 @@ public class MongoUpdate {
         return output;
     }
 
-    private void splitDimAndSpec(DBCollection prodCol, DBCollection prodSuppMapCol) {
+    private void geoLocCleanup(DBCollection supplierCol) {
 
-        DBCursor cursor = prodSuppMapCol.find();
+        DBCursor cursor = supplierCol.find();
         for (DBObject obj : cursor) {
+            BasicDBObject getLocObj = (BasicDBObject)obj.get("geoLoc");
+            String loc = getLocObj.get("location").toString();
 
-            DBObject prod = prodCol.findOne(new BasicDBObject("code", obj.get("pcode")));
-            if (prod == null) {
-                System.out.println(obj.get("pcode"));
-                prodSuppMapCol.remove(new BasicDBObject("pcode", obj.get("pcode")));
-            }
+            List<String> latLon = Arrays.asList(loc.split(", "));
 
+            System.out.println(latLon.get(0) + "-" + latLon.get(1));
+
+            supplierCol.update(new BasicDBObject("code", obj.get("code")),
+                    new BasicDBObject("$set", new BasicDBObject("geoLoc",
+                            new BasicDBObject("lat", latLon.get(0)).append("lon", latLon.get(1))))
+                    , false, true);
         }
     }
 }
