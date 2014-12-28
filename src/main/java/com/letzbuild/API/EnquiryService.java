@@ -178,8 +178,14 @@ public class EnquiryService {
         String qty = req.queryParams("quantity");
         InvalidInputs.failIfInvalid("quantity", qty);
 
-        String orderSpec = req.queryParams("specification");
-        InvalidInputs.failIfInvalid("specification", orderSpec);
+        String orderSpec = req.queryParams("orderspecification");
+        InvalidInputs.failIfInvalid("orderspecification", orderSpec);
+
+        String spec = req.queryParams("specification");
+        InvalidInputs.failIfInvalid("specification", spec);
+
+        String dim = req.queryParams("dimension");
+        InvalidInputs.failIfInvalid("dimension", dim);
 
         String sub = req.queryParams("subject");
         InvalidInputs.failIfInvalid("subject", sub);
@@ -212,6 +218,8 @@ public class EnquiryService {
         doc.put("email", email);
         doc.put("qty", qty);
         doc.put("orderSpec", orderSpec);
+        doc.put("spec", spec);
+        doc.put("dim", dim);
         doc.put("sub", sub);
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         doc.put("needDate", formatter.parse(needDate));
