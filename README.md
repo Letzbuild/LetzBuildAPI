@@ -150,7 +150,9 @@ The parameters are:
 * email
 * quantity - Quantity
 * subject - units for the quantity
-* specification - ordering specification
+* orderspecification - ordering specification
+* specification - the product specification
+* dimension - the product dimension
 * enquiryheading - Subject line. This could be a standard driven by a template
 * datepicker - Date on which the product is needed. The date has to be sent in the yyyy-MM-dd format only
 * approximatebudget
