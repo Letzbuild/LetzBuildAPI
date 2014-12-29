@@ -114,7 +114,6 @@ public class ProductService {
         fields.put("_id", 1);
         fields.put("category", 1);
         fields.put("code", 1);
-        fields.put("desc", 1);
         fields.put("manufacturers", 1);
         fields.put("name", 1);
         fields.put("purpose", 1);
