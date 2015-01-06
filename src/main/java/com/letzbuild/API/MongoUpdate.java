@@ -20,63 +20,24 @@ public class MongoUpdate {
         DBCollection prodSuppMapCol = db.getCollection("product_supplier_map");
         DBCollection supplierCol = db.getCollection("suppliers");
 
-        String [] catArr = {"Metal", "Minerals"};
+        String [] catArr = {"Ready Mix Concrete", "Cement", "Bricks & Blocks"};
 
         MongoUpdate mu = new MongoUpdate();
 
         //System.out.println("prepareProdSuppMap");
         //mu.prepareProdSuppMap(catArr, prodCol, supplierCol, prodSuppMapCol);
 
-        /*System.out.println("createCategoryTree");
-        mu.createCategoryTree(catArr, prodCol, categoriesCol);
+        //System.out.println("createCategoryTree");
+        //mu.createCategoryTree(catArr, prodCol, categoriesCol);
 
         System.out.println("updateSupplierCounts");
         mu.updateSupplierCounts(prodSuppMapCol, categoriesCol);
 
-        System.out.println("renameProductCategory");
-        mu.renameProductCategory(prodCol);*/
+        //System.out.println("renameProductCategory");
+        //mu.renameProductCategory(prodCol);
 
-        //System.out.println("addStarRating");
-        //mu.addStarRating(supplierCol, prodSuppMapCol, prodCol);
-
-        //System.out.println("getting rating info in prod supp mapping");
-        //mu.addRatinginPSM(supplierCol, prodSuppMapCol);
-
-       System.out.println("cleanup format of leoLoc");
-       mu.geoLocCleanup(supplierCol);
-    }
-
-    private void addRatinginPSM(DBCollection supplierCol, DBCollection prodSuppMapCol) {
-        DBCursor suppCursor = supplierCol.find();
-        for (DBObject suppObj : suppCursor) {
-
-            System.out.println(suppObj.get("code"));
-
-            BasicDBObject target = new BasicDBObject("supplier",
-                    new BasicDBObject("scode", suppObj.get("code"))
-                            .append("name", suppObj.get("name"))
-                            .append("rating", suppObj.get("rating")));
-
-            prodSuppMapCol.update(new BasicDBObject("supplier.scode", suppObj.get("code")),
-                        new BasicDBObject("$set", target), false, true);
-        }
-    }
-
-    private void addStarRating(DBCollection supplierCol, DBCollection prodSuppMapCol, DBCollection prodCol) {
-        DBCursor suppCursor = supplierCol.find(new BasicDBObject("rating", 5));
-        for (DBObject suppObj : suppCursor) {
-
-            System.out.println(suppObj.get("code"));
-
-
-            DBCursor prodSuppCursor = prodSuppMapCol.find(new BasicDBObject("supplier.scode", suppObj.get("code")));
-            for (DBObject prodSuppObj : prodSuppCursor) {
-                System.out.println(prodSuppObj.get("pcode"));
-                prodCol.update(new BasicDBObject("code", prodSuppObj.get("pcode")),
-                        new BasicDBObject("$push", new BasicDBObject("starSuppliers",
-                                new BasicDBObject("scode", suppObj.get("code")).append("name", suppObj.get("name")))));
-            }
-        }
+       //System.out.println("cleanup format of leoLoc");
+       //mu.geoLocCleanup(prodSuppMapCol, prodCol);
     }
 
     private void renameProductCategory(DBCollection prodCol) {
@@ -121,14 +82,15 @@ public class MongoUpdate {
     private void prepareProdSuppMap(String [] catArr, DBCollection prodCol, DBCollection supplierCol,
                                     DBCollection prodSuppMapCol) {
 
-        //DBObject inClause = new BasicDBObject("$in", catArr);
+        DBObject query = new BasicDBObject();
+        query.put("category", new BasicDBObject("$in", catArr));
 
-        DBCursor cursor = prodCol.find();
+        DBCursor cursor = prodCol.find(query);
         for (DBObject obj : cursor) {
             System.out.println(obj.get("code"));
             prodSuppMapCol.update(new BasicDBObject("pcode", obj.get("code")),
                        new BasicDBObject("$set",
-                               new BasicDBObject("category", obj.get("category"))
+                               new BasicDBObject("category", obj.get("subCategory"))
                                        .append("pname", obj.get("name")).append("purl", obj.get("url"))), false, true);
         }
 
@@ -146,7 +108,7 @@ public class MongoUpdate {
     }
 
     private void createCategoryTree(String [] catArr, DBCollection prodCol, DBCollection categoriesCol) {
-        int i = 0;
+        int i = 2;
 
         for (String category : catArr) {
             Iterable<DBObject> output = getCategoryTree(category, prodCol);
@@ -201,21 +163,19 @@ public class MongoUpdate {
         return output;
     }
 
-    private void geoLocCleanup(DBCollection supplierCol) {
+    private void geoLocCleanup(DBCollection prodSuppMapCol, DBCollection prodCol) {
 
-        DBCursor cursor = supplierCol.find();
+        DBCursor cursor = prodCol.find(new BasicDBObject("category", null));
         for (DBObject obj : cursor) {
-            BasicDBObject getLocObj = (BasicDBObject)obj.get("geoLoc");
-            String loc = getLocObj.get("location").toString();
 
-            List<String> latLon = Arrays.asList(loc.split(", "));
+            System.out.println(obj.get("code"));
 
-            System.out.println(latLon.get(0) + "-" + latLon.get(1));
+            DBObject pobj = prodSuppMapCol.findOne(new BasicDBObject("pcode", obj.get("code")));
 
-            supplierCol.update(new BasicDBObject("code", obj.get("code")),
-                    new BasicDBObject("$set", new BasicDBObject("geoLoc",
-                            new BasicDBObject("lat", latLon.get(0)).append("lon", latLon.get(1))))
-                    , false, true);
+            System.out.println(pobj.get("category"));
+
+            prodCol.update(new BasicDBObject("code", obj.get("code")),
+                    new BasicDBObject("$set", new BasicDBObject("category", pobj.get("category"))), false, true);
         }
     }
 }

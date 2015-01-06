@@ -141,7 +141,6 @@ public class ProductService {
         fields.put("purpose", 1);
         fields.put("dim", 1);
         fields.put("specs", 1);
-        fields.put("starSuppliers", 1);
         fields.put("url", 1);
         fields.put("orderSpec", 1);
 
