@@ -51,12 +51,8 @@ public class ProductService {
         BasicDBObject query = new BasicDBObject();
         query.append("parent", null);
 
-        BasicDBObject fields = new BasicDBObject();
-        fields.put("_id", 1);
-        fields.put("category", 1);
-
         long count = categoriesCollection_.count(query);
-        DBCursor cursor = categoriesCollection_.find(query, fields).skip(page * limit).limit(limit);
+        DBCursor cursor = categoriesCollection_.find(query).skip(page * limit).limit(limit);
 
         try {
             out = new HashMap<String, Object>();
