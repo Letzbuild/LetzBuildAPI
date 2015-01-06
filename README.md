@@ -20,9 +20,12 @@ There are multiple parameters supported. They are all mutually exclusive or can 
  * page - typical pagination numbers. The default if not passed is 1.  
 
 
-**GET**  **http://url:port/products/categories**  
+**GET**  **http://url:port/products/categories?limit=num&page=num**  
 
 Lists out all the product categories
+
+ * limit - This parameter is supplied with a number that limits the search results.  
+ * page - typical pagination numbers. The default if not passed is 1.  
 
 
 **GET**  **http://url:port/products/categories/:category**
@@ -64,12 +67,11 @@ The parameters are:
  Gets the profile details of a supplier based on the supplier's code.   
  
 
-**GET**  **http://url:port/suppliers/retrieve?pcode=product_code&cat=category&limit=num&page=num**
+**GET**  **http://url:port/suppliers/retrieve?pcode=product_code&limit=num&page=num**
 
 There are multiple parameters supported. They all form AND clauses if passed together. They can also be used independently.
 
  * pcode - This retrieves the list of suppliers that are dealing with the product specified as pcode. The pcode is case sensitive.
- * cat - This retrieves the suppliers given a product category. This also gives the products under the category that the supplier deals with 
  * limit - This parameter is supplied with a number that limits the search results. So for a registered user, this number could be 10/20/25. For a non-registered user, this could be as low as 4. The default is 10. 
  * page - typical pagination numbers. The default if not passed is 1.
  
@@ -115,7 +117,9 @@ The parameters are:
 * email
 * quantity - Quantity
 * subject - units for the quantity
-* specification - ordering specification
+* orderspecification - ordering specification
+* specification - the product specification
+* dimension - the product dimension
 * enquiryheading - Subject line. This could be a standard driven by a template
 * datepicker - Date on which the product is needed. The date has to be sent in the yyyy-MM-dd format only
 * approximatebudget

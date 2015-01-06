@@ -9,9 +9,7 @@ import spark.Request;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class EnquiryService {
@@ -66,8 +64,14 @@ public class EnquiryService {
         String qty = req.queryParams("quantity");
         InvalidInputs.failIfInvalid("quantity", qty);
 
-        String orderSpec = req.queryParams("specification");
-        InvalidInputs.failIfInvalid("specification", orderSpec);
+        String orderSpec = req.queryParams("orderspecification");
+        InvalidInputs.failIfInvalid("orderspecification", orderSpec);
+
+        String spec = req.queryParams("specification");
+        InvalidInputs.failIfInvalid("specification", spec);
+
+        String dim = req.queryParams("dimension");
+        InvalidInputs.failIfInvalid("dimension", dim);
 
         String sub = req.queryParams("subject");
         InvalidInputs.failIfInvalid("subject", sub);
@@ -102,6 +106,8 @@ public class EnquiryService {
         doc.put("email", email);
         doc.put("qty", qty);
         doc.put("orderSpec", orderSpec);
+        doc.put("spec", spec);
+        doc.put("dim", dim);
         doc.put("sub", sub);
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         doc.put("needDate", formatter.parse(needDate));
@@ -115,8 +121,8 @@ public class EnquiryService {
         supplierEnquiriesCollection_.insert(doc);
     }
 
-    public List<DBObject> retrieveSupplierEnquiries(Request req) {
-        List<DBObject> enquiries = null;
+    public Map<String, Object> retrieveSupplierEnquiries(Request req) {
+        Map<String, Object> out = null;
 
         int limit = Integer.parseInt(p_.getProperty("pageLimit"));
         String limitStr = req.queryParams("limit");
@@ -141,15 +147,19 @@ public class EnquiryService {
             query.append("scode", scode);
         }
 
+        long count = supplierEnquiriesCollection_.count(query);
         DBCursor cursor = supplierEnquiriesCollection_.find(query).skip(page * limit)
                 .sort(new BasicDBObject("enqDate", -1)).limit(limit);
         try {
-            enquiries = cursor.toArray();
+            out = new HashMap<String, Object>();
+
+            out.put("pagination", JsonUtil.constructPageObject(count, page, limit));
+            out.put("result", cursor.toArray());
         } finally {
             cursor.close();
         }
 
-        return enquiries;
+        return out;
     }
 
     public void sendProductEnquiry(Request req) throws ParseException {
@@ -233,8 +243,8 @@ public class EnquiryService {
         productEnquiriesCollection_.insert(doc);
     }
 
-    public List<DBObject> retrieveProductEnquiries(Request req) {
-        List<DBObject> enquiries = null;
+    public Map<String, Object> retrieveProductEnquiries(Request req) {
+        Map<String, Object> out = null;
 
         int limit = Integer.parseInt(p_.getProperty("pageLimit"));
         String limitStr = req.queryParams("limit");
@@ -259,15 +269,19 @@ public class EnquiryService {
             query.append("pcode", pcode);
         }
 
+        long count = productEnquiriesCollection_.count(query);
         DBCursor cursor = productEnquiriesCollection_.find(query).skip(page * limit)
                 .sort(new BasicDBObject("enqDate", -1)).limit(limit);
         try {
-            enquiries = cursor.toArray();
+            out = new HashMap<String, Object>();
+
+            out.put("pagination", JsonUtil.constructPageObject(count, page, limit));
+            out.put("result", cursor.toArray());
         } finally {
             cursor.close();
         }
 
-        return enquiries;
+        return out;
     }
 
     public void sendBOMEnquiry(Request req) throws ParseException {
@@ -314,8 +328,8 @@ public class EnquiryService {
         bomEnquiriesCollection_.insert(doc);
     }
 
-    public List<DBObject> retrieveBOMEnquiries(Request req) {
-        List<DBObject> enquiries = null;
+    public Map<String, Object> retrieveBOMEnquiries(Request req) {
+        Map<String, Object> out = null;
 
         int limit = Integer.parseInt(p_.getProperty("pageLimit"));
         String limitStr = req.queryParams("limit");
@@ -333,15 +347,19 @@ public class EnquiryService {
 
         BasicDBObject query = new BasicDBObject();
 
+        long count = bomEnquiriesCollection_.count(query);
         DBCursor cursor = bomEnquiriesCollection_.find(query).skip(page * limit)
                 .sort(new BasicDBObject("enqDate", -1)).limit(limit);
         try {
-            enquiries = cursor.toArray();
+            out = new HashMap<String, Object>();
+
+            out.put("pagination", JsonUtil.constructPageObject(count, page, limit));
+            out.put("result", cursor.toArray());
         } finally {
             cursor.close();
         }
 
-        return enquiries;
+        return out;
     }
 
     public void sendPMSEnquiry(Request req) throws ParseException {
@@ -388,8 +406,8 @@ public class EnquiryService {
         pmsEnquiriesCollection_.insert(doc);
     }
 
-    public List<DBObject> retrievePMSEnquiries(Request req) {
-        List<DBObject> enquiries = null;
+    public Map<String, Object> retrievePMSEnquiries(Request req) {
+        Map<String, Object> out = null;
 
         int limit = Integer.parseInt(p_.getProperty("pageLimit"));
         String limitStr = req.queryParams("limit");
@@ -407,15 +425,19 @@ public class EnquiryService {
 
         BasicDBObject query = new BasicDBObject();
 
+        long count = pmsEnquiriesCollection_.count(query);
         DBCursor cursor = pmsEnquiriesCollection_.find(query).skip(page * limit)
                 .sort(new BasicDBObject("enqDate", -1)).limit(limit);
         try {
-            enquiries = cursor.toArray();
+            out = new HashMap<String, Object>();
+
+            out.put("pagination", JsonUtil.constructPageObject(count, page, limit));
+            out.put("result", cursor.toArray());
         } finally {
             cursor.close();
         }
 
-        return enquiries;
+        return out;
     }
 
     public void sendQSEnquiry(Request req) throws ParseException {
@@ -462,8 +484,8 @@ public class EnquiryService {
         qsEnquiriesCollection_.insert(doc);
     }
 
-    public List<DBObject> retrieveQSEnquiries(Request req) {
-        List<DBObject> enquiries = null;
+    public Map<String, Object> retrieveQSEnquiries(Request req) {
+        Map<String, Object> out = null;
 
         int limit = Integer.parseInt(p_.getProperty("pageLimit"));
         String limitStr = req.queryParams("limit");
@@ -481,14 +503,18 @@ public class EnquiryService {
 
         BasicDBObject query = new BasicDBObject();
 
+        long count = qsEnquiriesCollection_.count(query);
         DBCursor cursor = qsEnquiriesCollection_.find(query).skip(page * limit)
                 .sort(new BasicDBObject("enqDate", -1)).limit(limit);
         try {
-            enquiries = cursor.toArray();
+            out = new HashMap<String, Object>();
+
+            out.put("pagination", JsonUtil.constructPageObject(count, page, limit));
+            out.put("result", cursor.toArray());
         } finally {
             cursor.close();
         }
 
-        return enquiries;
+        return out;
     }
 }

@@ -7,6 +7,7 @@ package com.letzbuild.API;
 import com.mongodb.DBObject;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.letzbuild.API.JsonUtil.json;
 import static com.letzbuild.API.JsonUtil.toJson;
@@ -17,10 +18,10 @@ public class SupplierController {
 
     public SupplierController(final SupplierService supplierService, UserService userService) {
 
-        // http://url:port/suppliers/retrieve?pcode=product_code&cat=category&limit=num&page=num
+        // http://url:port/suppliers/retrieve?pcode=product_code&limit=num&page=num
         get("/suppliers/retrieve", (req, res) -> {
             // check if it is based on product code.
-            Iterable<DBObject> list = supplierService.retrieveSuppliers(req);
+            Map<String, Object> list = supplierService.retrieveSuppliersBasedOnProduct(req);
             if (list != null) {
                 return list;
             }
@@ -32,7 +33,7 @@ public class SupplierController {
         // http://url:port/suppliers/products/retrieve?scode=supplier_code&limit=num&page=num
         get("/suppliers/products/retrieve", (req, res) -> {
 
-            Iterable<DBObject> list = supplierService.retrieveProductsForSupplier(req);
+            Map<String, Object> list = supplierService.retrieveProductsForSupplier(req);
             if (list != null) {
                 return list;
             }

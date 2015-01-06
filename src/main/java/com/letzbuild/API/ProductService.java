@@ -30,21 +30,44 @@ public class ProductService {
         p_ = p;
     }
 
-    public List<DBObject> retrieveCategories() {
-        List<DBObject> categories = null;
+    public Map<String, Object> retrieveCategories(Request req) {
+        Map<String, Object> out = null;
+
+        int limit = Integer.parseInt(p_.getProperty("pageLimit"));
+        String limitStr = req.queryParams("limit");
+        if ((limitStr != null) && (limitStr.length() > 0)) {
+            limit = Integer.parseInt(limitStr);
+        }
+
+        int page = 1;
+        String pageStr = req.queryParams("page");
+        if ((pageStr != null) && (pageStr.length() > 0)) {
+            page = Integer.parseInt(pageStr);
+        }
+        // the skips go from 0 onwards.
+        --page;
 
         //db.categories.find({parent: null})
         BasicDBObject query = new BasicDBObject();
         query.append("parent", null);
 
-        DBCursor cursor = categoriesCollection_.find(query);
+        BasicDBObject fields = new BasicDBObject();
+        fields.put("_id", 1);
+        fields.put("category", 1);
+
+        long count = categoriesCollection_.count(query);
+        DBCursor cursor = categoriesCollection_.find(query, fields).skip(page * limit).limit(limit);
+
         try {
-            categories = cursor.toArray();
+            out = new HashMap<String, Object>();
+
+            out.put("pagination", JsonUtil.constructPageObject(count, page, limit));
+            out.put("result", cursor.toArray());
         } finally {
             cursor.close();
         }
 
-        return categories;
+        return out;
     }
 
     public List<DBObject> retrieveCategories(String category) {
@@ -52,7 +75,7 @@ public class ProductService {
 
         BasicDBObject query = new BasicDBObject();
 
-        query.append("_id", category);
+        query.append("category", category);
 
 
         DBCursor cursor = categoriesCollection_.find(query);
@@ -65,8 +88,8 @@ public class ProductService {
         return categories;
     }
 
-    public List<DBObject> retrieveProducts(Request req) {
-        List<DBObject> products = null;
+    public Map<String, Object> retrieveProducts(Request req) {
+        Map<String, Object> out = null;
 
         int limit = Integer.parseInt(p_.getProperty("pageLimit"));
         String limitStr = req.queryParams("limit");
@@ -98,15 +121,18 @@ public class ProductService {
             query.append("code", pcode);
         }
 
+        long count = productsCollection_.count(query);
         DBCursor cursor = productsCollection_.find(query, prepareProductFields()).skip(page * limit).limit(limit);
 
         try {
-            products = cursor.toArray();
+            out = new HashMap<String, Object>();
+            out.put("pagination", JsonUtil.constructPageObject(count, page, limit));
+            out.put("result", cursor.toArray());
         } finally {
             cursor.close();
         }
 
-        return products;
+        return out;
     }
 
     private BasicDBObject prepareProductFields() {

@@ -8,6 +8,7 @@ import com.mongodb.DBObject;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 import static com.letzbuild.API.JsonUtil.json;
 import static spark.Spark.get;
@@ -32,7 +33,7 @@ public class EnquiryController {
 
         // retrieve product based enquiries
         get("/enquiries/supplier/retrieve", (req, res) -> {
-            List<DBObject> list = enquiryService.retrieveSupplierEnquiries(req);
+            Map<String, Object> list = enquiryService.retrieveSupplierEnquiries(req);
             if (list != null) {
                 return list;
             }
@@ -56,7 +57,7 @@ public class EnquiryController {
 
         // retrieve product based enquiries
         get("/enquiries/product/retrieve", (req, res) -> {
-            List<DBObject> list = enquiryService.retrieveProductEnquiries(req);
+            Map<String, Object> list = enquiryService.retrieveProductEnquiries(req);
             if (list != null) {
                 return list;
             }
@@ -80,7 +81,7 @@ public class EnquiryController {
 
         // retrieve product based enquiries
         get("/enquiries/bom/retrieve", (req, res) -> {
-            List<DBObject> list = enquiryService.retrieveBOMEnquiries(req);
+            Map<String, Object> list = enquiryService.retrieveBOMEnquiries(req);
             if (list != null) {
                 return list;
             }
@@ -104,7 +105,7 @@ public class EnquiryController {
 
         // retrieve product based enquiries
         get("/enquiries/pms/retrieve", (req, res) -> {
-            List<DBObject> list = enquiryService.retrievePMSEnquiries(req);
+            Map<String, Object> list = enquiryService.retrievePMSEnquiries(req);
             if (list != null) {
                 return list;
             }
@@ -128,7 +129,7 @@ public class EnquiryController {
 
         // retrieve product based enquiries
         get("/enquiries/qs/retrieve", (req, res) -> {
-            List<DBObject> list = enquiryService.retrieveQSEnquiries(req);
+            Map<String, Object> list = enquiryService.retrieveQSEnquiries(req);
             if (list != null) {
                 return list;
             }

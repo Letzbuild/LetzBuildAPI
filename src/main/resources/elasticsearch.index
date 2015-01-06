@@ -7,7 +7,7 @@ Products mapping
          "filter": {
             "nGram_filter": {
                "type": "nGram",
-               "min_gram": 2,
+               "min_gram": 3,
                "max_gram": 20,
                "token_chars": [
                   "letter",
@@ -45,12 +45,13 @@ Products mapping
                            "search_analyzer": "whitespace_analyzer"
                         },
                "properties": {
-                    "category": {"type":"string"},
-                    "code": {"type":"string"},
+                    "category": {"type":"string", "index": "not_analyzed"},
+                    "code": {"type":"string", "index": "not_analyzed"},
                     "name": {"type":"string"},
-                    "desc": {"type":"string"},
-                    "manufacturers" : {"type" : "string", "index_name" : "manufacturer"},
-                    "purpose" : {"type" : "string", "index_name" : "purp"},
+                    "specs" : {"type" : "string", "index_name" : "spec"},
+                    "dim" : {"type" : "string", "index_name" : "dimension"},
+                    "manufacturers" : {"type" : "string", "index_name" : "manufacturer", "index": "not_analyzed"},
+                    "purpose" : {"type" : "string", "index_name" : "purp", "index": "not_analyzed"},
                     "url": {"type": "string", "index": "no", "include_in_all": false}
 
                }
@@ -106,10 +107,10 @@ Suppliers mapping
                         },
                "properties": {
                     "name": {"type":"string"},
-                    "rating": {"type":"integer"},
-                    "city": {"type":"string"},
-                    "state": {"type":"string"},
-                         "address": {"type":"string"},
+                    "rating": {"type":"integer", "index": "not_analyzed"},
+                    "city": {"type":"string", "index": "not_analyzed"},
+                    "state": {"type":"string", "index": "not_analyzed"},
+                    "address": {"type":"string"},
                     "geoLoc" : {"type" : "geo_point"}
 
                }

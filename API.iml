@@ -45,6 +45,10 @@
     <orderEntry type="library" name="Maven: org.antlr:antlr-runtime:3.5" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm:4.1" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm-commons:4.1" level="project" />
+    <orderEntry type="library" name="Maven: org.codemonkey.simplejavamail:simple-java-mail:2.1" level="project" />
+    <orderEntry type="library" name="Maven: log4j:log4j:1.2.16" level="project" />
+    <orderEntry type="library" name="Maven: javax.mail:mail:1.4.1" level="project" />
+    <orderEntry type="library" name="Maven: javax.activation:activation:1.1" level="project" />
   </component>
 </module>
 

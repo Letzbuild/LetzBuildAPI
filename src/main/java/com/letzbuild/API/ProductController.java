@@ -26,7 +26,7 @@ public class ProductController {
                 return new ResponseError("One of the parameters is mandatory");
             }
 
-            List<DBObject> list = productService.retrieveProducts(req);
+            Map<String, Object> list = productService.retrieveProducts(req);
             if (list != null) {
                 return list;
             }
@@ -48,7 +48,7 @@ public class ProductController {
 
         // http://url:port/products/categories
         get("/products/categories", (req, res) -> {
-            List<DBObject> list = productService.retrieveCategories();
+            Map<String, Object> list = productService.retrieveCategories(req);
             if (list != null) {
                 return list;
             }
