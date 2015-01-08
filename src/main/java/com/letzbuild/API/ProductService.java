@@ -66,22 +66,39 @@ public class ProductService {
         return out;
     }
 
-    public List<DBObject> retrieveCategories(String category) {
-        List<DBObject> categories = null;
+    public Map<String, Object> retrieveSubCategories(Request req) {
+        Map<String, Object> out = null;
+
+        int limit = Integer.parseInt(p_.getProperty("pageLimit"));
+        String limitStr = req.queryParams("limit");
+        if ((limitStr != null) && (limitStr.length() > 0)) {
+            limit = Integer.parseInt(limitStr);
+        }
+
+        int page = 1;
+        String pageStr = req.queryParams("page");
+        if ((pageStr != null) && (pageStr.length() > 0)) {
+            page = Integer.parseInt(pageStr);
+        }
+        // the skips go from 0 onwards.
+        --page;
+
+        String category = req.params(":category");
 
         BasicDBObject query = new BasicDBObject();
-
         query.append("category", category);
 
-
-        DBCursor cursor = categoriesCollection_.find(query);
+        long count = categoriesCollection_.count(query);
+        DBCursor cursor = categoriesCollection_.find(query).skip(page * limit).limit(limit);
         try {
-            categories = cursor.toArray();
+            out = new HashMap<String, Object>();
+            out.put("pagination", JsonUtil.constructPageObject(count, page, limit));
+            out.put("result", cursor.toArray());
         } finally {
             cursor.close();
         }
 
-        return categories;
+        return out;
     }
 
     public Map<String, Object> retrieveProducts(Request req) {

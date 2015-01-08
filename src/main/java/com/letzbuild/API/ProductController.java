@@ -37,8 +37,8 @@ public class ProductController {
 
         // http://url:port/products/categories/:category
         get("/products/categories/:category", (req, res) -> {
-            String category = req.params(":category");
-            List<DBObject> list = productService.retrieveCategories(category);
+
+            Map<String, Object> list = productService.retrieveSubCategories(req);
             if (list != null) {
                 return list;
             }
