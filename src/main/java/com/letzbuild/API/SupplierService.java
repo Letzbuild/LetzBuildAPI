@@ -191,7 +191,7 @@ public class SupplierService {
             supp.put("address", suppObj.get("address"));
             supp.put("email", suppObj.get("email"));
             supp.put("phone", suppObj.get("phone"));
-
+            supp.put("url", suppObj.get("url"));
         }
 
         return out;

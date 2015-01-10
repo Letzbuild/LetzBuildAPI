@@ -14,6 +14,8 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import spark.Request;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -42,15 +44,28 @@ public class ProductService {
         return out;
     }
 
-    public Map<String, Object> retrieveSubCategories(Request req) {
+    public Map<String, Object> retrieveSubCategories(Request req)  {
         Map<String, Object> out = null;
 
         String category = req.params(":category");
+        try {
+            category = URLDecoder.decode(category, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+
+        }
+
+        System.out.println(category);
 
         BasicDBObject query = new BasicDBObject();
-        query.append("category", category);
+        query.append("parent", category);
 
-        out = JsonUtil.constructPaginatedOut(p_, req, query, categoriesCollection_, null);
+        BasicDBObject fields = new BasicDBObject();
+        fields.put("_id", 0);
+        fields.put("category", 1);
+        fields.put("parent", 1);
+        fields.put("cnt", 1);
+
+        out = JsonUtil.constructPaginatedOut(p_, req, query, categoriesCollection_, fields);
 
         return out;
     }
@@ -86,7 +101,7 @@ public class ProductService {
         fields.put("url", 1);
         fields.put("orderSpec", 1);
 
-        out = JsonUtil.constructPaginatedOut(p_, req, query, productsCollection_, null);
+        out = JsonUtil.constructPaginatedOut(p_, req, query, productsCollection_, fields);
 
         return out;
     }
