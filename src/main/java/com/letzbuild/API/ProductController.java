@@ -46,7 +46,7 @@ public class ProductController {
             return new ResponseError("No product category results found");
         }, json());
 
-        // http://url:port/products/categories
+        // http://url:port/products/categories?limit=num&page=num
         get("/products/categories", (req, res) -> {
             Map<String, Object> list = productService.retrieveCategories(req);
             if (list != null) {

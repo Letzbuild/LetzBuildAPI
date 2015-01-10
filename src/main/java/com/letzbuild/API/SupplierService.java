@@ -164,20 +164,6 @@ public class SupplierService {
     public Map<String, Object> retrieveSuppliersBasedOnProduct(Request req) {
         Map<String, Object> out = null;
 
-        int limit = Integer.parseInt(p_.getProperty("pageLimit"));
-        String limitStr = req.queryParams("limit");
-        if ((limitStr != null) && (limitStr.length() > 0)) {
-            limit = Integer.parseInt(limitStr);
-        }
-
-        int page = 1;
-        String pageStr = req.queryParams("page");
-        if ((pageStr != null) && (pageStr.length() > 0)) {
-            page = Integer.parseInt(pageStr);
-        }
-        // the skips go from 0 onwards.
-        --page;
-
         String pcode = req.queryParams("pcode");
 
         // this is to get the aggregated list of suppliers
@@ -190,16 +176,22 @@ public class SupplierService {
         fields.put("purl", 1);
         fields.put("supplier", 1);
 
-        long count = prodSupMapCollection_.count(query);
-        DBCursor cursor = prodSupMapCollection_.find(query, fields).skip(page * limit).limit(limit);
+        out = JsonUtil.constructPaginatedOut(p_, req, query, prodSupMapCollection_, fields);
 
-        try {
-            out = new HashMap<String, Object>();
+        List<DBObject> list = (List<DBObject>)out.get("result");
 
-            out.put("pagination", JsonUtil.constructPageObject(count, page, limit));
-            out.put("result", cursor.toArray());
-        } finally {
-            cursor.close();
+        // cycle through this list and add more details to the supplier.
+        for (DBObject sobj : list) {
+
+            BasicDBObject supp = (BasicDBObject)sobj.get("supplier");
+            DBObject suppObj = suppliersCollection_.findOne(new BasicDBObject("code", supp.get("scode")));
+
+            supp.put("address", suppObj.get("address"));
+            supp.put("contact", suppObj.get("contact"));
+            supp.put("address", suppObj.get("address"));
+            supp.put("email", suppObj.get("email"));
+            supp.put("phone", suppObj.get("phone"));
+
         }
 
         return out;

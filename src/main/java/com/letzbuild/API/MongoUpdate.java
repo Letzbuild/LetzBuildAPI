@@ -30,14 +30,14 @@ public class MongoUpdate {
         //System.out.println("createCategoryTree");
         //mu.createCategoryTree(catArr, prodCol, categoriesCol);
 
-        System.out.println("updateSupplierCounts");
-        mu.updateSupplierCounts(prodSuppMapCol, categoriesCol);
+        //System.out.println("updateSupplierCounts");
+        //mu.updateSupplierCounts(prodSuppMapCol, categoriesCol);
 
         //System.out.println("renameProductCategory");
         //mu.renameProductCategory(prodCol);
 
-       //System.out.println("cleanup format of leoLoc");
-       //mu.geoLocCleanup(prodSuppMapCol, prodCol);
+       System.out.println("cleanup format of leoLoc");
+       mu.geoLocCleanup(prodCol, prodSuppMapCol);
     }
 
     private void renameProductCategory(DBCollection prodCol) {
@@ -163,19 +163,16 @@ public class MongoUpdate {
         return output;
     }
 
-    private void geoLocCleanup(DBCollection prodSuppMapCol, DBCollection prodCol) {
+    private void geoLocCleanup(DBCollection prodCol, DBCollection prodSuppMapCol) {
 
-        DBCursor cursor = prodCol.find(new BasicDBObject("category", null));
+        DBCursor cursor = prodCol.find();
         for (DBObject obj : cursor) {
 
-            System.out.println(obj.get("code"));
+            String url = obj.get("code").toString() + ".jpg";
+            System.out.println(url);
 
-            DBObject pobj = prodSuppMapCol.findOne(new BasicDBObject("pcode", obj.get("code")));
-
-            System.out.println(pobj.get("category"));
-
-            prodCol.update(new BasicDBObject("code", obj.get("code")),
-                    new BasicDBObject("$set", new BasicDBObject("category", pobj.get("category"))), false, true);
+            prodSuppMapCol.update(new BasicDBObject("pcode", obj.get("code")),
+                    new BasicDBObject("$set", new BasicDBObject("purl", url)), false, true);
         }
     }
 }
