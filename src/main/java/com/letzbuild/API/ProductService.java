@@ -54,8 +54,6 @@ public class ProductService {
 
         }
 
-        System.out.println(category);
-
         BasicDBObject query = new BasicDBObject();
         query.append("parent", category);
 
