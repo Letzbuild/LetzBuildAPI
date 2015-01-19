@@ -33,7 +33,7 @@ public class JsonUtil {
     }
 
     public static Map<String, Object> constructPaginatedOut(Properties p, Request req,
-                  BasicDBObject query, DBCollection dbCol, BasicDBObject fields) {
+                  BasicDBObject query, DBCollection dbCol, BasicDBObject fields, BasicDBObject sort) {
 
         Map<String, Object> out = null;
 
@@ -55,10 +55,17 @@ public class JsonUtil {
 
         long count = dbCol.count(query);
         DBCursor cursor = null;
-        if (fields != null)
-            cursor = dbCol.find(query, fields).skip(page * limit).limit(limit);
-        else
-            cursor = dbCol.find(query).skip(page * limit).limit(limit);
+        if (fields != null) {
+            if (sort == null)
+                cursor = dbCol.find(query, fields).skip(page * limit).limit(limit);
+            else
+                cursor = dbCol.find(query, fields).skip(page * limit).limit(limit).sort(sort);
+        } else {
+            if (sort == null)
+                cursor = dbCol.find(query).skip(page * limit).limit(limit);
+            else
+                cursor = dbCol.find(query).skip(page * limit).limit(limit).sort(sort);
+        }
 
         try {
             out.put("pagination", JsonUtil.constructPageObject(count, page, limit));

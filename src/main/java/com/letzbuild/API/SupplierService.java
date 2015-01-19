@@ -176,7 +176,7 @@ public class SupplierService {
         fields.put("purl", 1);
         fields.put("supplier", 1);
 
-        out = JsonUtil.constructPaginatedOut(p_, req, query, prodSupMapCollection_, fields);
+        out = JsonUtil.constructPaginatedOut(p_, req, query, prodSupMapCollection_, fields, null);
 
         List<DBObject> list = (List<DBObject>)out.get("result");
 
@@ -195,7 +195,15 @@ public class SupplierService {
         }
 
         return out;
+    }
 
+    public DBObject retrieveSupplier(String code) {
+        DBObject out = null;
+
+        BasicDBObject query = new BasicDBObject("code", code);
+        out = suppliersCollection_.findOne(query);
+
+        return out;
     }
 
 

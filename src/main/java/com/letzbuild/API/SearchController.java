@@ -31,6 +31,19 @@ public class SearchController {
             return new ResponseError("No results found");
         }, json());
 
+        // http://url:port/search/global?&word=word
+        get("/search/global", (req, res) -> {
+            if (req.queryParams().size() == 0) {
+                return new ResponseError("One of the parameters is mandatory");
+            }
+            Map<String, Object> list = searchService.globalSearch(req);
+            if (list != null) {
+                return list;
+            }
+            res.status(400);
+            return new ResponseError("No results found");
+        }, json());
+
         // http://url:port/search/indexproducts
         get("/search/indexproducts", (req, res) -> {
             searchService.indexProducts();

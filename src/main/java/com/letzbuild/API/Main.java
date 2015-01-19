@@ -31,7 +31,8 @@ public class Main {
         new ProductController(new ProductService(letzbuildDB, p));
         new BuyerController(new BuyerService(letzbuildDB), new UserService(letzbuildDB));
         new SupplierController(new SupplierService(letzbuildDB, p), new UserService(letzbuildDB));
-        new EnquiryController(new EnquiryService(letzbuildDB, p));
+        new EnquiryController(new EnquiryService(letzbuildDB, p), new ProductService(letzbuildDB, p),
+                new SupplierService(letzbuildDB, p));
         new SearchController(new SearchService(letzbuildDB, p));
     }
 

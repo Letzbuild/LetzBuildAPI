@@ -39,7 +39,7 @@ public class ProductService {
         BasicDBObject query = new BasicDBObject();
         query.append("parent", null);
 
-        out = JsonUtil.constructPaginatedOut(p_, req, query, categoriesCollection_, null);
+        out = JsonUtil.constructPaginatedOut(p_, req, query, categoriesCollection_, null, null);
 
         return out;
     }
@@ -63,10 +63,11 @@ public class ProductService {
         fields.put("parent", 1);
         fields.put("cnt", 1);
 
-        out = JsonUtil.constructPaginatedOut(p_, req, query, categoriesCollection_, fields);
+        out = JsonUtil.constructPaginatedOut(p_, req, query, categoriesCollection_, fields, null);
 
         return out;
     }
+
 
     public Map<String, Object> retrieveProducts(Request req) {
         Map<String, Object> out = null;
@@ -99,8 +100,18 @@ public class ProductService {
         fields.put("url", 1);
         fields.put("orderSpec", 1);
 
-        out = JsonUtil.constructPaginatedOut(p_, req, query, productsCollection_, fields);
+        out = JsonUtil.constructPaginatedOut(p_, req, query, productsCollection_, fields, null);
 
         return out;
     }
+
+    public DBObject retrieveProduct(String code) {
+        DBObject out = null;
+
+        BasicDBObject query = new BasicDBObject("code", code);
+        out = productsCollection_.findOne(query);
+
+        return out;
+    }
+
 }

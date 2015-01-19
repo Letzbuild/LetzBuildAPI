@@ -15,24 +15,43 @@ import java.util.regex.Pattern;
 public class EnquiryService {
 
     private DBCollection supplierEnquiriesCollection_;
+    private DBCollection supplierEnquiriesQueueCollection_;
+
     private DBCollection productEnquiriesCollection_;
+    private DBCollection productEnquiriesQueueCollection_;
+
     private DBCollection bomEnquiriesCollection_;
+    private DBCollection bomEnquiriesQueueCollection_;
+
     private DBCollection pmsEnquiriesCollection_;
+    private DBCollection pmsEnquiriesQueueCollection_;
+
     private DBCollection qsEnquiriesCollection_;
+    private DBCollection qsEnquiriesQueueCollection_;
 
 
     private Properties p_;
 
     public EnquiryService(final DB letzbuildDB, final Properties p) {
         supplierEnquiriesCollection_ = letzbuildDB.getCollection("supplier_enquiries");
+        supplierEnquiriesQueueCollection_ = letzbuildDB.getCollection("supplier_enquiries_queue");
+
         productEnquiriesCollection_ = letzbuildDB.getCollection("product_enquiries");
+        productEnquiriesQueueCollection_ = letzbuildDB.getCollection("product_enquiries_queue");
+
         bomEnquiriesCollection_ = letzbuildDB.getCollection("bom_enquiries");
+        bomEnquiriesQueueCollection_ = letzbuildDB.getCollection("bom_enquiries_queue");
+
         pmsEnquiriesCollection_ = letzbuildDB.getCollection("pms_enquiries");
+        pmsEnquiriesQueueCollection_ = letzbuildDB.getCollection("pms_enquiries_queue");
+
         qsEnquiriesCollection_ = letzbuildDB.getCollection("qs_enquiries");
+        qsEnquiriesQueueCollection_ = letzbuildDB.getCollection("qs_enquiries_queue");
+
         p_ = p;
     }
 
-    public void sendSupplierEnquiry(Request req) throws ParseException {
+    public void sendSupplierEnquiry(Request req, DBObject prodObj, DBObject suppObj) throws ParseException {
 
         String enqno = req.queryParams("enquirynumber");
         InvalidInputs.failIfInvalid("enquirynumber", enqno);
@@ -94,11 +113,15 @@ public class EnquiryService {
         String instr = req.queryParams("anyspecialinstruction");
         InvalidInputs.failIfInvalid("anyspecialinstruction", instr);
 
+
         DBObject doc = new BasicDBObject();
         doc.put("enqno", enqno);
         doc.put("scode", scode);
         doc.put("sname", sname);
+        doc.put("surl", suppObj.get("url"));
         doc.put("pcode", pcode);
+        doc.put("pname", prodObj.get("name"));
+        doc.put("purl", prodObj.get("url"));
         doc.put("fname", fname);
         doc.put("lname", lname);
         doc.put("org", org);
@@ -119,6 +142,9 @@ public class EnquiryService {
         doc.put("enqDate", new Date());
 
         supplierEnquiriesCollection_.insert(doc);
+
+        DBObject queueDoc = new BasicDBObject("enqno", enqno);
+        supplierEnquiriesQueueCollection_.insert(queueDoc);
     }
 
     public Map<String, Object> retrieveSupplierEnquiries(Request req) {
@@ -162,7 +188,7 @@ public class EnquiryService {
         return out;
     }
 
-    public void sendProductEnquiry(Request req) throws ParseException {
+    public void sendProductEnquiry(Request req, DBObject prodObj) throws ParseException {
 
         String enqno = req.queryParams("enquirynumber");
         InvalidInputs.failIfInvalid("enquirynumber", enqno);
@@ -221,6 +247,8 @@ public class EnquiryService {
         DBObject doc = new BasicDBObject();
         doc.put("enqno", enqno);
         doc.put("pcode", pcode);
+        doc.put("pname", prodObj.get("name"));
+        doc.put("purl", prodObj.get("url"));
         doc.put("fname", fname);
         doc.put("lname", lname);
         doc.put("org", org);
@@ -241,6 +269,9 @@ public class EnquiryService {
         doc.put("enqDate", new Date());
 
         productEnquiriesCollection_.insert(doc);
+
+        DBObject queueDoc = new BasicDBObject("enqno", enqno);
+        productEnquiriesQueueCollection_.insert(queueDoc);
     }
 
     public Map<String, Object> retrieveProductEnquiries(Request req) {
@@ -326,6 +357,9 @@ public class EnquiryService {
         doc.put("enqDate", new Date());
 
         bomEnquiriesCollection_.insert(doc);
+
+        DBObject queueDoc = new BasicDBObject("enqno", enqno);
+        bomEnquiriesQueueCollection_.insert(queueDoc);
     }
 
     public Map<String, Object> retrieveBOMEnquiries(Request req) {
@@ -404,6 +438,9 @@ public class EnquiryService {
         doc.put("enqDate", new Date());
 
         pmsEnquiriesCollection_.insert(doc);
+
+        DBObject queueDoc = new BasicDBObject("enqno", enqno);
+        pmsEnquiriesQueueCollection_.insert(queueDoc);
     }
 
     public Map<String, Object> retrievePMSEnquiries(Request req) {
@@ -482,6 +519,9 @@ public class EnquiryService {
         doc.put("enqDate", new Date());
 
         qsEnquiriesCollection_.insert(doc);
+
+        DBObject queueDoc = new BasicDBObject("enqno", enqno);
+        qsEnquiriesQueueCollection_.insert(queueDoc);
     }
 
     public Map<String, Object> retrieveQSEnquiries(Request req) {

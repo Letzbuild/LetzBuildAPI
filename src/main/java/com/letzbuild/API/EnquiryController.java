@@ -17,12 +17,21 @@ import static spark.Spark.post;
 
 public class EnquiryController {
 
-    public EnquiryController(final EnquiryService enquiryService) {
+    public EnquiryController(final EnquiryService enquiryService, final ProductService productService,
+                             final SupplierService supplierService) {
 
         // send enquiry for this product to LetzBuild
         post("/enquiries/supplier/add", (req, res) -> {
             try {
-                enquiryService.sendSupplierEnquiry(req);
+                String pcode = req.queryParams("pcode");
+                InvalidInputs.failIfInvalid("pcode", pcode);
+                DBObject prodObj = productService.retrieveProduct(pcode);
+
+                String scode = req.queryParams("scode");
+                InvalidInputs.failIfInvalid("scode", scode);
+                DBObject suppObj = supplierService.retrieveSupplier(scode);
+
+                enquiryService.sendSupplierEnquiry(req, prodObj, suppObj);
             } catch (ParseException e) {
                 res.status(500);
                 return "failure";
@@ -46,7 +55,11 @@ public class EnquiryController {
         // send enquiry for this product to LetzBuild
         post("/enquiries/product/add", (req, res) -> {
             try {
-                enquiryService.sendProductEnquiry(req);
+                String pcode = req.queryParams("pcode");
+                InvalidInputs.failIfInvalid("pcode", pcode);
+                DBObject prodObj = productService.retrieveProduct(pcode);
+
+                enquiryService.sendProductEnquiry(req, prodObj);
             } catch (ParseException e) {
                 res.status(500);
                 return "failure";
