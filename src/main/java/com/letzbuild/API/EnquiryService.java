@@ -54,65 +54,25 @@ public class EnquiryService {
     public void sendSupplierEnquiry(Request req, DBObject prodObj, DBObject suppObj) throws ParseException {
 
         String enqno = req.queryParams("enquirynumber");
-        InvalidInputs.failIfInvalid("enquirynumber", enqno);
-
         String scode = req.queryParams("scode");
-        InvalidInputs.failIfInvalid("scode", scode);
-
         String sname = req.queryParams("suppliername");
-        InvalidInputs.failIfInvalid("suppliername", sname);
-
         String pcode = req.queryParams("pcode");
-        InvalidInputs.failIfInvalid("pcode", pcode);
-
         String fname = req.queryParams("firstname");
-        InvalidInputs.failIfInvalid("firstname", fname);
-
         String lname = req.queryParams("lastname");
-        InvalidInputs.failIfInvalid("lastname", lname);
-
         String org = req.queryParams("organisation");
-        InvalidInputs.failIfInvalid("organisation", org);
-
         String mobile = req.queryParams("mobilenumber");
-        InvalidInputs.failIfInvalid("mobilenumber", mobile);
-
         String email = req.queryParams("email");
-        InvalidInputs.failIfInvalid("email", email);
-
         String qty = req.queryParams("quantity");
-        InvalidInputs.failIfInvalid("quantity", qty);
-
         String orderSpec = req.queryParams("orderspecification");
-        InvalidInputs.failIfInvalid("orderspecification", orderSpec);
-
         String spec = req.queryParams("specification");
-        InvalidInputs.failIfInvalid("specification", spec);
-
         String dim = req.queryParams("dimension");
-        InvalidInputs.failIfInvalid("dimension", dim);
-
         String sub = req.queryParams("subject");
-        InvalidInputs.failIfInvalid("subject", sub);
-
         String needDate = req.queryParams("datepicker");
-        InvalidInputs.failIfInvalid("datepicker", needDate);
-
         String budget = req.queryParams("approximatebudget");
-        InvalidInputs.failIfInvalid("approximatebudget", budget);
-
         String loc = req.queryParams("deliverylocation");
-        InvalidInputs.failIfInvalid("deliverylocation", loc);
-
         String freq = req.queryParams("frequency");
-        InvalidInputs.failIfInvalid("frequency", freq);
-
         String reason = req.queryParams("reasonforpurchase");
-        InvalidInputs.failIfInvalid("reasonforpurchase", reason);
-
         String instr = req.queryParams("anyspecialinstruction");
-        InvalidInputs.failIfInvalid("anyspecialinstruction", instr);
-
 
         DBObject doc = new BasicDBObject();
         doc.put("enqno", enqno);
@@ -191,58 +151,23 @@ public class EnquiryService {
     public void sendProductEnquiry(Request req, DBObject prodObj) throws ParseException {
 
         String enqno = req.queryParams("enquirynumber");
-        InvalidInputs.failIfInvalid("enquirynumber", enqno);
-
         String pcode = req.queryParams("pcode");
-        InvalidInputs.failIfInvalid("pcode", pcode);
-
         String fname = req.queryParams("firstname");
-        InvalidInputs.failIfInvalid("firstname", fname);
-
         String lname = req.queryParams("lastname");
-        InvalidInputs.failIfInvalid("lastname", lname);
-
         String org = req.queryParams("organisation");
-        InvalidInputs.failIfInvalid("organisation", org);
-
         String mobile = req.queryParams("mobilenumber");
-        InvalidInputs.failIfInvalid("mobilenumber", mobile);
-
         String email = req.queryParams("email");
-        InvalidInputs.failIfInvalid("email", email);
-
         String qty = req.queryParams("quantity");
-        InvalidInputs.failIfInvalid("quantity", qty);
-
         String orderSpec = req.queryParams("orderspecification");
-        InvalidInputs.failIfInvalid("orderspecification", orderSpec);
-
         String spec = req.queryParams("specification");
-        InvalidInputs.failIfInvalid("specification", spec);
-
         String dim = req.queryParams("dimension");
-        InvalidInputs.failIfInvalid("dimension", dim);
-
         String sub = req.queryParams("subject");
-        InvalidInputs.failIfInvalid("subject", sub);
-
         String needDate = req.queryParams("datepicker");
-        InvalidInputs.failIfInvalid("datepicker", needDate);
-
         String budget = req.queryParams("approximatebudget");
-        InvalidInputs.failIfInvalid("approximatebudget", budget);
-
         String loc = req.queryParams("deliverylocation");
-        InvalidInputs.failIfInvalid("deliverylocation", loc);
-
         String freq = req.queryParams("frequency");
-        InvalidInputs.failIfInvalid("frequency", freq);
-
         String reason = req.queryParams("reasonforpurchase");
-        InvalidInputs.failIfInvalid("reasonforpurchase", reason);
-
         String instr = req.queryParams("anyspecialinstruction");
-        InvalidInputs.failIfInvalid("anyspecialinstruction", instr);
 
         DBObject doc = new BasicDBObject();
         doc.put("enqno", enqno);
@@ -318,31 +243,14 @@ public class EnquiryService {
     public void sendBOMEnquiry(Request req) throws ParseException {
 
         String enqno = req.queryParams("enquirynumber");
-        InvalidInputs.failIfInvalid("enquirynumber", enqno);
-
         String fname = req.queryParams("firstname");
-        InvalidInputs.failIfInvalid("firstname", fname);
-
         String lname = req.queryParams("lastname");
-        InvalidInputs.failIfInvalid("lastname", lname);
-
         String org = req.queryParams("organisation");
-        InvalidInputs.failIfInvalid("organisation", org);
-
         String mobile = req.queryParams("mobilenumber");
-        InvalidInputs.failIfInvalid("mobilenumber", mobile);
-
         String email = req.queryParams("email");
-        InvalidInputs.failIfInvalid("email", email);
-
         String sub = req.queryParams("enquiryheading");
-        InvalidInputs.failIfInvalid("enquiryheading", sub);
-
         String loc = req.queryParams("location");
-        InvalidInputs.failIfInvalid("location", loc);
-
         String instr = req.queryParams("anyadditionalinstruction");
-        InvalidInputs.failIfInvalid("anyadditionalinstruction", instr);
 
         DBObject doc = new BasicDBObject();
         doc.put("enqno", enqno);
@@ -399,31 +307,14 @@ public class EnquiryService {
     public void sendPMSEnquiry(Request req) throws ParseException {
 
         String enqno = req.queryParams("enquirynumber");
-        InvalidInputs.failIfInvalid("enquirynumber", enqno);
-
         String fname = req.queryParams("firstname");
-        InvalidInputs.failIfInvalid("firstname", fname);
-
         String lname = req.queryParams("lastname");
-        InvalidInputs.failIfInvalid("lastname", lname);
-
         String org = req.queryParams("organisation");
-        InvalidInputs.failIfInvalid("organisation", org);
-
         String mobile = req.queryParams("mobilenumber");
-        InvalidInputs.failIfInvalid("mobilenumber", mobile);
-
         String email = req.queryParams("email");
-        InvalidInputs.failIfInvalid("email", email);
-
         String sub = req.queryParams("enquiryheading");
-        InvalidInputs.failIfInvalid("enquiryheading", sub);
-
         String loc = req.queryParams("location");
-        InvalidInputs.failIfInvalid("location", loc);
-
         String instr = req.queryParams("anyadditionalinstruction");
-        InvalidInputs.failIfInvalid("anyadditionalinstruction", instr);
 
         DBObject doc = new BasicDBObject();
         doc.put("enqno", enqno);
@@ -480,31 +371,14 @@ public class EnquiryService {
     public void sendQSEnquiry(Request req) throws ParseException {
 
         String enqno = req.queryParams("enquirynumber");
-        InvalidInputs.failIfInvalid("enquirynumber", enqno);
-
         String fname = req.queryParams("firstname");
-        InvalidInputs.failIfInvalid("firstname", fname);
-
         String lname = req.queryParams("lastname");
-        InvalidInputs.failIfInvalid("lastname", lname);
-
         String org = req.queryParams("organisation");
-        InvalidInputs.failIfInvalid("organisation", org);
-
         String mobile = req.queryParams("mobilenumber");
-        InvalidInputs.failIfInvalid("mobilenumber", mobile);
-
         String email = req.queryParams("email");
-        InvalidInputs.failIfInvalid("email", email);
-
         String sub = req.queryParams("enquiryheading");
-        InvalidInputs.failIfInvalid("enquiryheading", sub);
-
         String loc = req.queryParams("location");
-        InvalidInputs.failIfInvalid("location", loc);
-
         String instr = req.queryParams("anyadditionalinstruction");
-        InvalidInputs.failIfInvalid("anyadditionalinstruction", instr);
 
         DBObject doc = new BasicDBObject();
         doc.put("enqno", enqno);

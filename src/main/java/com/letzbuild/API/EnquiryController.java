@@ -24,11 +24,9 @@ public class EnquiryController {
         post("/enquiries/supplier/add", (req, res) -> {
             try {
                 String pcode = req.queryParams("pcode");
-                InvalidInputs.failIfInvalid("pcode", pcode);
                 DBObject prodObj = productService.retrieveProduct(pcode);
 
                 String scode = req.queryParams("scode");
-                InvalidInputs.failIfInvalid("scode", scode);
                 DBObject suppObj = supplierService.retrieveSupplier(scode);
 
                 enquiryService.sendSupplierEnquiry(req, prodObj, suppObj);
@@ -56,7 +54,6 @@ public class EnquiryController {
         post("/enquiries/product/add", (req, res) -> {
             try {
                 String pcode = req.queryParams("pcode");
-                InvalidInputs.failIfInvalid("pcode", pcode);
                 DBObject prodObj = productService.retrieveProduct(pcode);
 
                 enquiryService.sendProductEnquiry(req, prodObj);
