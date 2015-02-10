@@ -61,6 +61,10 @@ public class SearchService {
                 .setTypes("product")
                 .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                 .addAggregation(AggregationBuilders.terms("catAgg").field("category"))
+                .addAggregation(AggregationBuilders.terms("purposeAgg").field("purpose"))
+                .addAggregation(AggregationBuilders.terms("manufacturerAgg").field("manufacturers"))
+                .addAggregation(AggregationBuilders.terms("dimAgg").field("dim"))
+                .addAggregation(AggregationBuilders.terms("specAgg").field("specs"))
                 .setQuery(QueryBuilders.matchQuery("_all", word)) // Query
                 .setFrom(0)
                 .setSize(limit);
@@ -122,35 +126,44 @@ public class SearchService {
     }
 
     public void indexProducts() {
+        String code = "";
+        try {
+            BasicDBObject fields = new BasicDBObject();
+            fields.put("_id", 0);
+            fields.put("category", 1);
+            fields.put("code", 1);
+            fields.put("manufacturers", 1);
+            fields.put("name", 1);
+            fields.put("purpose", 1);
+            fields.put("url", 1);
+            fields.put("dim", 1);
+            fields.put("specs", 1);
 
-        BasicDBObject fields = new BasicDBObject();
-        fields.put("_id", 0);
-        fields.put("category", 1);
-        fields.put("code", 1);
-        fields.put("desc", 1);
-        fields.put("manufacturers", 1);
-        fields.put("name", 1);
-        fields.put("purpose", 1);
-        fields.put("url", 1);
+            DBCursor cursor = productsCollection_.find(new BasicDBObject(), fields);
+            for (DBObject obj : cursor) {
 
-        DBCursor cursor = productsCollection_.find(new BasicDBObject(), fields);
-        for (DBObject obj : cursor) {
+                Map<String, Object> jsonDocument = new HashMap<>();
+                jsonDocument.put("id", obj.get("code"));
+                jsonDocument.put("category", obj.get("category"));
+                jsonDocument.put("code", obj.get("code"));
+                jsonDocument.put("desc", obj.get("desc"));
+                jsonDocument.put("manufacturers", obj.get("manufacturers"));
+                jsonDocument.put("name", obj.get("name"));
+                jsonDocument.put("purpose", obj.get("purpose"));
+                jsonDocument.put("url", obj.get("url"));
+                jsonDocument.put("dim", obj.get("dim"));
+                jsonDocument.put("specs", obj.get("specs"));
 
-            Map<String, Object> jsonDocument = new HashMap<>();
-            jsonDocument.put("id", obj.get("code"));
-            jsonDocument.put("category", obj.get("category"));
-            jsonDocument.put("code", obj.get("code"));
-            jsonDocument.put("desc", obj.get("desc"));
-            jsonDocument.put("manufacturers", obj.get("manufacturers"));
-            jsonDocument.put("name", obj.get("name"));
-            jsonDocument.put("purpose", obj.get("purpose"));
-            jsonDocument.put("url", obj.get("url"));
+                code = obj.get("code").toString();
 
-            // add this product to elasticsearch
-            IndexResponse response = getConnection().prepareIndex("products", "product", obj.get("code").toString())
-                    .setSource(jsonDocument)
-                    .execute()
-                    .actionGet();
+                // add this product to elasticsearch
+                IndexResponse response = getConnection().prepareIndex("products", "product", obj.get("code").toString())
+                        .setSource(jsonDocument)
+                        .execute()
+                        .actionGet();
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage() + code);
         }
     }
 

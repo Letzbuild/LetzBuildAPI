@@ -48,8 +48,8 @@ curl -XPUT "http://localhost:9200/products" -d'
                     "category": {"type":"string", "index": "not_analyzed"},
                     "code": {"type":"string", "index": "not_analyzed"},
                     "name": {"type":"string"},
-                    "specs" : {"type" : "string", "index_name" : "spec"},
-                    "dim" : {"type" : "string", "index_name" : "dimension"},
+                    "specs" : {"type" : "string", "index_name" : "spec", "index": "not_analyzed"},
+                    "dim" : {"type" : "string", "index_name" : "dimension", "index": "not_analyzed"},
                     "manufacturers" : {"type" : "string", "index_name" : "manufacturer", "index": "not_analyzed"},
                     "purpose" : {"type" : "string", "index_name" : "purp", "index": "not_analyzed"},
                     "url": {"type": "string", "index": "no", "include_in_all": false}
