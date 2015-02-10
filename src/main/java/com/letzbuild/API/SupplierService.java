@@ -160,7 +160,7 @@ public class SupplierService {
         return output;
     }
 
-    // retrieve the suppliers based on a product sub category.
+    // retrieve the suppliers based on a product code.
     public Map<String, Object> retrieveSuppliersBasedOnProduct(Request req) {
         Map<String, Object> out = null;
 
@@ -176,7 +176,9 @@ public class SupplierService {
         fields.put("purl", 1);
         fields.put("supplier", 1);
 
-        out = JsonUtil.constructPaginatedOut(p_, req, query, prodSupMapCollection_, fields, null);
+        BasicDBObject sort = new BasicDBObject("supplier.rating", -1);
+
+        out = JsonUtil.constructPaginatedOut(p_, req, query, prodSupMapCollection_, fields, sort);
 
         List<DBObject> list = (List<DBObject>)out.get("result");
 

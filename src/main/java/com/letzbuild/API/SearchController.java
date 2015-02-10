@@ -5,6 +5,7 @@ package com.letzbuild.API;
  */
 
 import com.mongodb.DBObject;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 
 import java.util.List;
@@ -32,13 +33,13 @@ public class SearchController {
         }, json());
 
         // http://url:port/search/global?&word=word
-        get("/search/global", (req, res) -> {
+        get("/search/products", (req, res) -> {
             if (req.queryParams().size() == 0) {
                 return new ResponseError("One of the parameters is mandatory");
             }
-            Map<String, Object> list = searchService.globalSearch(req);
-            if (list != null) {
-                return list;
+            String out = searchService.productSearch(req);
+            if (out != "") {
+                return out;
             }
             res.status(400);
             return new ResponseError("No results found");

@@ -17,6 +17,7 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
 import spark.Request;
 
 import javax.xml.soap.Node;
@@ -47,6 +48,33 @@ public class SearchService {
 
     private TransportClient getConnection() {
         return client_;
+    }
+
+    public String productSearch(Request req) {
+
+        String out = "";
+
+        int limit = Integer.parseInt(p_.getProperty("pageLimit"));
+        String word = req.queryParams("word");
+
+        SearchRequestBuilder srb = getConnection().prepareSearch("products")
+                .setTypes("product")
+                .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+                .addAggregation(AggregationBuilders.terms("catAgg").field("category"))
+                .setQuery(QueryBuilders.matchQuery("_all", word)) // Query
+                .setFrom(0)
+                .setSize(limit);
+
+        MultiSearchResponse sr = getConnection().prepareMultiSearch()
+                .add(srb)
+                .execute().actionGet();
+
+        for (MultiSearchResponse.Item item : sr.getResponses()) {
+            out = item.getResponse().toString();
+            break;
+        }
+
+        return out;
     }
 
     public Map<String, Object> globalSearch(Request req) {

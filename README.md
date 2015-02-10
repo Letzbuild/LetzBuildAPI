@@ -123,6 +123,8 @@ The parameters are:
 * enquiryheading - Subject line. This could be a standard driven by a template
 * datepicker - Date on which the product is needed. The date has to be sent in the yyyy-MM-dd format only
 * approximatebudget
+* locationlat - the delivery location's latitude
+* locationlong - the delivery location's longitude 
 * deliverylocation - a locality or location
 * frequency - frequency
 * reasonforpurchase
@@ -160,6 +162,8 @@ The parameters are:
 * enquiryheading - Subject line. This could be a standard driven by a template
 * datepicker - Date on which the product is needed. The date has to be sent in the yyyy-MM-dd format only
 * approximatebudget
+* locationlat - the delivery location's latitude
+* locationlong - the delivery location's longitude 
 * deliverylocation - a locality or location
 * frequency - frequency
 * reasonforpurchase
@@ -255,7 +259,15 @@ There are multiple parameters supported. They all form OR clauses if passed toge
  
  
  ======================================Search======================================
- 
+ **GET**  **http://url:port/search/products?word=keyword?limit=num**
+  
+  This searches for products by picking up textual content from sub category, name, specs, dimensions, manufacturers as well as purpose. 
+  The results have the total hits and an aggregation on sub category.
+  
+   * word - This is the search phrase or keyword or partial word etc.
+   * limit - This parameter is supplied with a number that limits the search results.  
+
+   
  
  **GET**  **http://url:port/search/global?word=keyword**
  

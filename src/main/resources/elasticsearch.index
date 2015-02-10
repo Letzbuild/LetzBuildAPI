@@ -1,6 +1,6 @@
 Products mapping
 ================
-
+curl -XPUT "http://localhost:9200/products" -d'
 {
   "settings": {
       "analysis": {
@@ -61,7 +61,7 @@ Products mapping
 
 Suppliers mapping
 =================
-
+curl -XPUT "http://localhost:9200/suppliers" -d
 {
   "settings": {
       "analysis": {

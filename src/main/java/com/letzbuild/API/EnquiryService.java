@@ -69,6 +69,8 @@ public class EnquiryService {
         String sub = req.queryParams("subject");
         String needDate = req.queryParams("datepicker");
         String budget = req.queryParams("approximatebudget");
+        String locationlat = req.queryParams("locationlat");
+        String locationlong = req.queryParams("locationlong");
         String loc = req.queryParams("deliverylocation");
         String freq = req.queryParams("frequency");
         String reason = req.queryParams("reasonforpurchase");
@@ -95,6 +97,8 @@ public class EnquiryService {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         doc.put("needDate", formatter.parse(needDate));
         doc.put("budget", budget);
+        double[] locArr = {Double.parseDouble(locationlong), Double.parseDouble(locationlat)};
+        doc.put("coord", locArr);
         doc.put("loc", loc);
         doc.put("freq", freq);
         doc.put("reason", reason);
@@ -164,6 +168,8 @@ public class EnquiryService {
         String sub = req.queryParams("subject");
         String needDate = req.queryParams("datepicker");
         String budget = req.queryParams("approximatebudget");
+        String locationlat = req.queryParams("locationlat");
+        String locationlong = req.queryParams("locationlong");
         String loc = req.queryParams("deliverylocation");
         String freq = req.queryParams("frequency");
         String reason = req.queryParams("reasonforpurchase");
@@ -187,6 +193,8 @@ public class EnquiryService {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         doc.put("needDate", formatter.parse(needDate));
         doc.put("budget", budget);
+        double[] locArr = {Double.parseDouble(locationlong), Double.parseDouble(locationlat)};
+        doc.put("coord", locArr);
         doc.put("loc", loc);
         doc.put("freq", freq);
         doc.put("reason", reason);

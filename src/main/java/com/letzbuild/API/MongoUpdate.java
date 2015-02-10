@@ -37,7 +37,7 @@ public class MongoUpdate {
         //mu.renameProductCategory(prodCol);
 
        System.out.println("cleanup format of leoLoc");
-       mu.geoLocCleanup(prodCol, prodSuppMapCol);
+       mu.geoLocCleanup(supplierCol, prodSuppMapCol, db);
     }
 
     private void renameProductCategory(DBCollection prodCol) {
@@ -163,16 +163,38 @@ public class MongoUpdate {
         return output;
     }
 
-    private void geoLocCleanup(DBCollection prodCol, DBCollection prodSuppMapCol) {
+    private void geoLocCleanup(DBCollection supplierCol, DBCollection prodSuppMapCol, DB db) {
 
-        DBCursor cursor = prodCol.find();
+        /*DBCursor cursor = supplierCol.find();
         for (DBObject obj : cursor) {
 
-            String url = obj.get("code").toString() + ".jpg";
-            System.out.println(url);
+            prodSuppMapCol.update(new BasicDBObject("supplier.scode", obj.get("code")),
+                    new BasicDBObject("$set", new BasicDBObject("supplier.loc", obj.get("loc"))), false, true);
+        }*/
 
-            prodSuppMapCol.update(new BasicDBObject("pcode", obj.get("code")),
-                    new BasicDBObject("$set", new BasicDBObject("purl", url)), false, true);
-        }
+        String lat = "13.03424";
+        String lon = "80.229953";
+        double[] locArr = {Double.parseDouble(lon), Double.parseDouble(lat)};
+        System.out.println(locArr[0] + "-" + locArr[1]);
+
+
+
+        /*BasicDBObject myCmd = new BasicDBObject();
+        myCmd.append("geoNear", "product_supplier_map");
+        double[] loc = {80.229953, 13.03424};
+        BasicDBObject near = new BasicDBObject("type", "Point").append("coordinates", loc);
+        myCmd.append("near", near);
+        myCmd.append("spherical", true);
+        //myCmd.append("maxDistance", (double)2500/6378137);
+        myCmd.append("distanceMultiplier", (double)0.001);
+        myCmd.append("num", 10);
+
+        BasicDBObject query = new BasicDBObject("pcode", "LB11");
+        //BasicDBObject sort = new BasicDBObject("supplier.rating", -1);
+        myCmd.append("query", query);
+
+
+        CommandResult myResult = db.command(myCmd);
+        System.out.println(myResult.toString());*/
     }
 }
