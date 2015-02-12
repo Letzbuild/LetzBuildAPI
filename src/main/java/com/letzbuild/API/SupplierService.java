@@ -7,20 +7,18 @@ package com.letzbuild.API;
 import com.mongodb.*;
 import spark.Request;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Properties;
+import java.util.*;
 
 public class SupplierService {
 
     private DBCollection suppliersCollection_;
     private DBCollection prodSupMapCollection_;
+    private DB letzbuildDB_;
 
     private Properties p_;
 
     public SupplierService(final DB letzbuildDB, final Properties p) {
+        letzbuildDB_ = letzbuildDB;
         suppliersCollection_ = letzbuildDB.getCollection("suppliers");
         prodSupMapCollection_ = letzbuildDB.getCollection("product_supplier_map");
         p_ = p;
@@ -195,6 +193,74 @@ public class SupplierService {
             supp.put("phone", suppObj.get("phone"));
             supp.put("url", suppObj.get("url"));
         }
+
+        return out;
+    }
+
+    // retrieve the suppliers based on a product code.
+    public BasicDBObject retrieveSuppliersBasedOnProductAndCoords(Request req) {
+        BasicDBObject out = null;
+
+        String pcode = req.queryParams("pcode");
+
+        // this is to get the aggregated list of suppliers
+        BasicDBObject query = new BasicDBObject("pcode", pcode);
+
+        String lat = req.queryParams("lat");
+        String lon = req.queryParams("lon");
+
+        int limit = Integer.parseInt(p_.getProperty("pageLimit"));
+        String limitStr = req.queryParams("limit");
+        if ((limitStr != null) && (limitStr.length() > 0)) {
+            limit = Integer.parseInt(limitStr);
+        }
+
+        BasicDBObject myCmd = new BasicDBObject();
+        myCmd.append("geoNear", "product_supplier_map");
+        double[] loc = {Double.parseDouble(lon), Double.parseDouble(lat)};
+        BasicDBObject near = new BasicDBObject("type", "Point").append("coordinates", loc);
+        myCmd.append("near", near);
+        myCmd.append("spherical", true);
+        myCmd.append("distanceMultiplier", (double) 0.001);
+        myCmd.append("num", limit);
+
+        myCmd.append("query", query);
+
+        CommandResult myResult = letzbuildDB_.command(myCmd);
+        List<DBObject> list = (List<DBObject>) myResult.get("results");
+
+        List<BasicDBObject> outList = new ArrayList<BasicDBObject>();
+
+        // cycle through this list and add more details to the supplier.
+        for (DBObject obj : list) {
+
+            BasicDBObject orig = (BasicDBObject) obj.get("obj");
+
+            BasicDBObject supp = (BasicDBObject)orig.get("supplier");
+            DBObject suppObj = suppliersCollection_.findOne(new BasicDBObject("code", supp.get("scode")));
+
+            BasicDBObject supplier = new BasicDBObject();
+            supplier.put("address", suppObj.get("address"));
+            supplier.put("contact", suppObj.get("contact"));
+            supplier.put("address", suppObj.get("address"));
+            supplier.put("email", suppObj.get("email"));
+            supplier.put("phone", suppObj.get("phone"));
+            supplier.put("url", suppObj.get("url"));
+            supplier.put("name", suppObj.get("name"));
+            supplier.put("scode", suppObj.get("code"));
+            supplier.put("rating", suppObj.get("rating"));
+            supplier.put("distance", obj.get("dis"));
+
+            BasicDBObject doc = new BasicDBObject();
+            doc.put("pcode", orig.get("pcode"));
+            doc.put("pname", orig.get("pname"));
+            doc.put("purl", orig.get("purl"));
+            doc.put("supplier", supplier);
+
+            outList.add(doc);
+        }
+
+        out = new BasicDBObject("result", outList);
 
         return out;
     }

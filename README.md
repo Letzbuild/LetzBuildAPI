@@ -67,11 +67,14 @@ The parameters are:
  Gets the profile details of a supplier based on the supplier's code.   
  
 
-**GET**  **http://url:port/suppliers/retrieve?pcode=product_code&limit=num&page=num**
+**GET**  **http://url:port/suppliers/retrieve?pcode=product_code&lat=latitude&lon=longitudelimit=num&page=num**
 
-There are multiple parameters supported. They all form AND clauses if passed together. They can also be used independently.
+The suppliers are listed given a product code. In case a combination of latitude and longitude is provided, a new field called distance is dished out. 
+The distance is the distance in kms from the location to the supplier's location. 
 
  * pcode - This retrieves the list of suppliers that are dealing with the product specified as pcode. The pcode is case sensitive.
+ * lat - The latitude of a location to calculate the distance
+ * lon - The longitude of a location to calculate the distance
  * limit - This parameter is supplied with a number that limits the search results. So for a registered user, this number could be 10/20/25. For a non-registered user, this could be as low as 4. The default is 10. 
  * page - typical pagination numbers. The default if not passed is 1.
  

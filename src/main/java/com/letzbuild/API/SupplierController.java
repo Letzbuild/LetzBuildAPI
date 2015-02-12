@@ -4,6 +4,7 @@ package com.letzbuild.API;
  * Created by venky on 22/09/14.
  */
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
 import java.util.List;
@@ -18,12 +19,21 @@ public class SupplierController {
 
     public SupplierController(final SupplierService supplierService, UserService userService) {
 
-        // http://url:port/suppliers/retrieve?pcode=product_code&limit=num&page=num
+        // http://url:port/suppliers/retrieve?pcode=product_code&lat=23.34&lon=80.45&limit=num&page=num
         get("/suppliers/retrieve", (req, res) -> {
-            // check if it is based on product code.
-            Map<String, Object> list = supplierService.retrieveSuppliersBasedOnProduct(req);
-            if (list != null) {
-                return list;
+
+            // check if it is based on lat lon.
+            String lat = req.queryParams("lat");
+            if ((lat != null) && (lat.length() > 0)) {
+                BasicDBObject out = supplierService.retrieveSuppliersBasedOnProductAndCoords(req);
+                if (out != null) {
+                    return out;
+                }
+            } else {
+                Map<String, Object> list = supplierService.retrieveSuppliersBasedOnProduct(req);
+                if (list != null) {
+                    return list;
+                }
             }
 
             res.status(400);

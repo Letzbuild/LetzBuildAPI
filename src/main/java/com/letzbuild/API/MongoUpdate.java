@@ -172,14 +172,7 @@ public class MongoUpdate {
                     new BasicDBObject("$set", new BasicDBObject("supplier.loc", obj.get("loc"))), false, true);
         }*/
 
-        String lat = "13.03424";
-        String lon = "80.229953";
-        double[] locArr = {Double.parseDouble(lon), Double.parseDouble(lat)};
-        System.out.println(locArr[0] + "-" + locArr[1]);
-
-
-
-        /*BasicDBObject myCmd = new BasicDBObject();
+        BasicDBObject myCmd = new BasicDBObject();
         myCmd.append("geoNear", "product_supplier_map");
         double[] loc = {80.229953, 13.03424};
         BasicDBObject near = new BasicDBObject("type", "Point").append("coordinates", loc);
@@ -195,6 +188,42 @@ public class MongoUpdate {
 
 
         CommandResult myResult = db.command(myCmd);
-        System.out.println(myResult.toString());*/
+        System.out.println(myResult.toString());
+
+        List<DBObject> list = (List<DBObject>) myResult.get("results");
+
+        List<BasicDBObject> outList = new ArrayList<BasicDBObject>();
+
+        // cycle through this list and add more details to the supplier.
+        for (DBObject obj : list) {
+
+            BasicDBObject orig = (BasicDBObject) obj.get("obj");
+
+            BasicDBObject supp = (BasicDBObject)orig.get("supplier");
+            DBObject suppObj = supplierCol.findOne(new BasicDBObject("code", supp.get("scode")));
+
+            BasicDBObject supplier = new BasicDBObject();
+            supplier.put("address", suppObj.get("address"));
+            supplier.put("contact", suppObj.get("contact"));
+            supplier.put("address", suppObj.get("address"));
+            supplier.put("email", suppObj.get("email"));
+            supplier.put("phone", suppObj.get("phone"));
+            supplier.put("url", suppObj.get("url"));
+            supplier.put("name", suppObj.get("name"));
+            supplier.put("scode", suppObj.get("code"));
+            supplier.put("rating", suppObj.get("rating"));
+            supplier.put("distance", obj.get("dis"));
+
+            BasicDBObject doc = new BasicDBObject();
+            doc.put("pcode", orig.get("pcode"));
+            doc.put("pname", orig.get("pname"));
+            doc.put("purl", orig.get("purl"));
+            doc.put("supplier", supplier);
+
+            outList.add(doc);
+        }
+
+        System.out.println(new BasicDBObject("result", outList));
+
     }
 }
